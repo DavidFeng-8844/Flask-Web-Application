@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1> Fruits </h1>
+    {% for f in fruits %}
+    <article class="media content-section">
+        <div class="media-body">
+          <div class="article-metadata">
+            <a class="mr-2" href="#">Name: {{ f.name }}</a>
+            <small class="text-muted">Shape: {{ f.shape }}</small>
+          </div>
+          <h2><a class="article-title" href="#">Color: {{ f.color }}</a></h2>
+          <!-- <p class="article-content">{{ f }}</p> -->
+        </div>
+      </article>
+    {% endfor %}
+{% endblock %}
