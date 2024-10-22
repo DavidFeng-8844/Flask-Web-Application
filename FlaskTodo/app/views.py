@@ -181,7 +181,7 @@ def toggle_todo(todo_id):
     todo = Todo.query.get_or_404(todo_id)
     todo.completed = not todo.completed
     db.session.commit()
-    flash(f'Todo {"completed" if todo.completed else "reopened"}!', 'success')
+    flash(f'Task {"completed" if todo.completed else "reopened"}!', 'success')
     return redirect(url_for('todo', 
                           status=request.args.get('status', 'all'),
                           importance=request.args.get('importance', 'all'),
