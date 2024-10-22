@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="content-section">
+        <h2>Todo List</h2>
+        <!-- Add Todo Form -->
+        <form method="POST" action="{{ url_for('add_todo') }}" class="mb-4">
+            <div class="form-row">
+                <div class="col-md-4 mb-2">
+                    <input type="text" class="form-control" name="todo_item" placeholder="Enter a new todo item..." required>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <input type="date" class="form-control" name="deadline" required>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <select class="form-control" name="importance" required>
+                        <option value="high">High Priority</option>
+                        <option value="medium">Medium Priority</option>
+                        <option value="low">Low Priority</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mb-2">
+                    <button class="btn btn-outline-info btn-block" type="submit">Add Task</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Filter Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Filters</h5>
+            </div>
+            <div class="card-body">
+                <!-- Status Filters -->
+                <div class="mb-3">
+                    <label class="font-weight-bold">Status:</label>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{{ url_for('todo', status='all', importance=importance, deadline=deadline) }}" 
+                           class="btn btn-outline-primary {{ 'active' if status_filter == 'all' else '' }}">
+                            All
+                            <span class="badge badge-primary ml-1">{{ counts.status.all }}</span>
+                        </a>
+                        <a href="{{ url_for('todo', status='active', importance=importance, deadline=deadline) }}" 
+                           class="btn btn-outline-warning {{ 'active' if status_filter == 'active' else '' }}">
+                            Active
+                            <span class="badge badge-warning ml-1">{{ counts.status.active }}</span>
+                        </a>
+                        <a href="{{ url_for('todo', status='completed', importance=importance, deadline=deadline) }}" 
+                           class="btn btn-outline-success {{ 'active' if status_filter == 'completed' else '' }}">
+                            Completed
+                            <span class="badge badge-success ml-1">{{ counts.status.completed }}</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Importance Filters -->
+                <div class="mb-3">
+                    <label class="font-weight-bold">Priority:</label>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{{ url_for('todo', status=status, importance='all', deadline=deadline, sort_by = 'importance') }}" 
+                           class="btn btn-outline-secondary {{ 'active' if importance_filter == 'all' else '' }}">
+                            All 
+                            <span class="badge badge-secondary ml-1">{{ counts.importance.all }}</span>
+                        </a>
+                        <a href="{{ url_for('todo', status=status, importance='high', deadline=deadline) }}" 
+                           class="btn btn-outline-danger {{ 'active' if importance_filter == 'high' else '' }}">
+                            High
+                            <span class="badge badge-danger ml-1">{{ counts.importance.high }}</span>
+                        </a>
+                        <a href="{{ url_for('todo', status=status, importance='medium', deadline=deadline) }}" 
+                           class="btn btn-outline-warning {{ 'active' if importance_filter == 'medium' else '' }}">
+                            Medium
+                            <span class="badge badge-warning ml-1">{{ counts.importance.medium }}</span>
+                        </a>
+                        <a href="{{ url_for('todo', status=status, importance='low', deadline=deadline) }}" 
+                           class="btn btn-outline-info {{ 'active' if importance_filter == 'low' else '' }}">
+                            Low
+                            <span class="badge badge-info ml-1">{{ counts.importance.low }}</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Deadline Filter -->
+                <div class="mb-3">
+                    <label class="font-weight-bold">Deadline:</label>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{{ url_for('todo', status=status, importance=importance, deadline='all', sort_by = 'deadline') }}" 
+                           class="btn btn-outline-secondary {{ 'active' if deadline_filter == 'all' else '' }}">
+                            All
+                            <span class="badge badge-secondary ml-1">{{ counts.deadline.all }}</span>
+                        </a>
+                        <a href="{{ url_for('todo', status=status, importance=importance, deadline='overdue') }}" 
+                           class="btn btn-outline-danger {{ 'active' if deadline_filter == 'overdue' else '' }}">
+                            Overdue
+                            <span class="badge badge-danger ml-1">{{ counts.deadline.overdue }}</span>
+                        </a>
+                        <a href="{{ url_for('todo', status=status, importance=importance, deadline='today') }}" 
+                           class="btn btn-outline-warning {{ 'active' if deadline_filter == 'today' else '' }}">
+                            Today
+                            <span class="badge badge-warning ml-1">{{ counts.deadline.today }}</span>
+                        </a>
+                        <a href="{{ url_for('todo', status=status, importance=importance, deadline='week') }}" 
+                           class="btn btn-outline-info {{ 'active' if deadline_filter == 'week' else '' }}">
+                            This Week
+                            <span class="badge badge-info ml-1">{{ counts.deadline.week }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Todo List -->
+        {% if todos %}
+            <div class="list-group">
+                {% for todo in todos %}
+                    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center
+                              {% if todo.completed %}list-group-item-success{% endif %}
+                              {% if not todo.completed and todo.is_overdue %}list-group-item-danger{% endif %}">
+                        <div class="d-flex align-items-center flex-grow-1">
+                            <form method="POST" action="{{ url_for('toggle_todo', todo_id=todo.id) }}" class="mr-3">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" 
+                                           id="todo{{ todo.id }}" 
+                                           {% if todo.completed %}checked{% endif %}
+                                           onChange="this.form.submit()">
+                                    <label class="custom-control-label" for="todo{{ todo.id }}"></label>
+                                </div>
+                            </form>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span {% if todo.completed %}class="text-muted" style="text-decoration: line-through"{% endif %}>
+                                        {{ todo.content }}
+                                        {% if todo.importance == 'high' %}
+                                            <span class="badge badge-danger">High</span>
+                                        {% elif todo.importance == 'medium' %}
+                                            <span class="badge badge-warning">Medium</span>
+                                        {% else %}
+                                            <span class="badge badge-info">Low</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <small class="text-muted">
+                                    Created: {{ todo.date_created.strftime('%Y-%m-%d %H:%M') }} |
+                                    Deadline: {{ todo.deadline.strftime('%Y-%m-%d') }}
+                                    {% if not todo.completed and todo.is_overdue %}
+                                        <span class="text-danger">(Overdue)</span>
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-sm btn-outline-primary" 
+                                    data-toggle="modal" 
+                                    data-target="#editModal{{ todo.id }}">
+                                Edit
+                            </button>
+                            <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="post">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"  >Delete</button>
+                            </form>                            
+                        </div>
+                    </div>
+
+                    <!-- Edit Modal for each todo -->
+                    <div class="modal fade" id="editModal{{ todo.id }}" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit Todo</h5>
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <span>&times;</span>
+                                    </button>
+                                </div>
+                                <form method="POST" action="{{ url_for('edit_todo', todo_id=todo.id) }}">
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label>Task Description</label>
+                                            <input type="text" class="form-control" 
+                                                   name="edited_todo" 
+                                                   value="{{ todo.content }}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Deadline</label>
+                                            <input type="date" class="form-control" 
+                                                   name="edited_deadline" 
+                                                   value="{{ todo.deadline.strftime('%Y-%m-%d') }}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Priority</label>
+                                            <select class="form-control" name="edited_importance" required>
+                                                <option value="3" {% if todo.importance == 3 %}selected{% endif %}>High Priority</option>
+                                                <option value="2" {% if todo.importance == 2 %}selected{% endif %}>Medium Priority</option>
+                                                <option value="1" {% if todo.importance == 1 %}selected{% endif %}>Low Priority</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                No tasks found matching your current filters.
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}
