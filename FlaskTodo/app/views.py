@@ -6,26 +6,6 @@ from app.forms import CalculatorForm, RegistrationForm, LoginForm
 from app.models import User, Post, Todo
 
 
-@flask_todo.route('/calculator', methods=['GET', 'POST']) # decorator to tell Flask what URL should trigger the function
-def calculator():
-    form = CalculatorForm()
-    if form.validate_on_submit():
-        flash('Succesfully received form data. %s + %s  = %s'%(form.number1.data, form.number2.data, form.number1.data+form.number2.data))
-    return render_template('calculator.html',
-                           title='Calculator',
-                           form=form)
-
-@flask_todo.route('/')
-def index():
-    user = {'name': 'Homer Simpson'}
-    fruits = ["Apple", "Banana", "Orange", "Kiwi"]
-    return render_template('index.html', title='Simple template example', user=user, fruits=fruits)
-
-@flask_todo.route('/fruit')
-def fruit():
-    fruits = [{"name": "apple", "color": "red", "shape": "round"}, {"name": "banana", "color": "yellow", "shape": "crescent"}, {"name": "orange", "color": "orange", "shape": "round"}, {"name": "kiwi", "color": "brown", "shape": "oval"}]
-    return render_template("fruit_with_inheritance.html",fruits=fruits)
-
 @flask_todo.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
@@ -45,27 +25,16 @@ def login():
         return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
 
+# To do Route Handlers
+############################################################################################################
 
-@flask_todo.route("/todo/toggle/<int:todo_id>", methods=['POST'])
-def toggle_todo(todo_id):
-    todo = Todo.query.get_or_404(todo_id)
-    todo.completed = not todo.completed
-    db.session.commit()
-    flash(f'Todo {"completed" if todo.completed else "reopened"}!', 'success')
-    return redirect(url_for('todo', 
-                          status=request.args.get('status', 'all'),
-                          importance=request.args.get('importance', 'all'),
-                          deadline=request.args.get('deadline', 'all'),
-                          sort=request.args.get('sort', 'deadline')))
-
-
-@flask_todo.route("/todo")
+@flask_todo.route("/")
 def todo():
     # Get filter parameters
     status_filter = request.args.get('status', 'all')
     importance_filter = request.args.get('importance', 'all')
     deadline_filter = request.args.get('deadline', 'all')
-    sort_by = request.args.get('sort', 'deadline')  # deadline, importance, created
+    sort_by = request.args.get('sort_by', 'all')  # deadline, importance, created
 
     # Base query
     base_query = Todo.query
@@ -76,9 +45,10 @@ def todo():
     elif status_filter == 'active':
         base_query = base_query.filter_by(completed=False)
 
-    # Importance filter
+    # Importance filter 
     if importance_filter in ['high', 'medium', 'low']:
         base_query = base_query.filter_by(importance=importance_filter)
+
 
     # Deadline filter
     today = date.today()
@@ -86,50 +56,42 @@ def todo():
         base_query = base_query.filter(Todo.deadline < today, Todo.completed == False)
     elif deadline_filter == 'today':
         base_query = base_query.filter(Todo.deadline == today)
-    elif deadline_filter == 'upcoming':
-        base_query = base_query.filter(Todo.deadline > today)
-    elif deadline_filter == 'no-deadline':
-        base_query = base_query.filter(Todo.deadline == None)
+    elif deadline_filter == 'week':
+        base_query = base_query.filter(Todo.deadline <= today + timedelta(days=7))
 
-    # Sorting
+    # Sorting for three different filter
     if sort_by == 'deadline':
         base_query = base_query.order_by(Todo.deadline.asc().nulls_last())
     elif sort_by == 'importance':
-        # Custom ordering for importance levels
-        base_query = base_query.order_by(
-            case(
-                (Todo.importance == 'high', 3),
-                (Todo.importance == 'medium', 2),
-                (Todo.importance == 'low', 1)
-            )
+        importance_order = db.case(
+            (Todo.importance == 'high', 1),
+            (Todo.importance == 'medium', 2),
+            (Todo.importance == 'low', 3)
         )
-    else:  # created
+        base_query = base_query.order_by(importance_order)
+    else:
         base_query = base_query.order_by(Todo.date_created.desc())
 
     # Get counts for filters
-    # counts = {
-    #     'status': {
-    #         'all': Todo.query.count(),
-    #         'active': Todo.query.filter_by(completed=False).count(),
-    #         'completed': Todo.query.filter_by(completed=True).count()
-    #     },
-    #     'importance': {
-    #         'high': Todo.query.filter_by(importance='high').count(),
-    #         'medium': Todo.query.filter_by(importance='medium').count(),
-    #         'low': Todo.query.filter_by(importance='low').count()
-    #     },
-    #     'deadline': {
-    #         'overdue': Todo.query.filter(Todo.deadline < today, Todo.completed == False).count(),
-    #         'today': Todo.query.filter(Todo.deadline == today).count(),
-    #         'upcoming': Todo.query.filter(Todo.deadline > today).count(),
-    #         'no-deadline': Todo.query.filter(Todo.deadline == None).count()
-    #     }
-    # }
     counts = {
-    'all': Todo.query.count(),
-    'active': Todo.query.filter_by(completed=False).count(),
-    'completed': Todo.query.filter_by(completed=True).count(),
-}
+        'status': {
+            'all': Todo.query.count(),
+            'active': Todo.query.filter_by(completed=False).count(),
+            'completed': Todo.query.filter_by(completed=True).count()
+        },
+        'importance': {
+            'all': Todo.query.count(),
+            'high': Todo.query.filter_by(importance='high').count(),
+            'medium': Todo.query.filter_by(importance='medium').count(),
+            'low': Todo.query.filter_by(importance='low').count()
+        },
+        'deadline': {
+            'all': Todo.query.filter(Todo.deadline != None).count(),
+            'overdue': Todo.query.filter(Todo.deadline < today, Todo.completed == False).count(),
+            'today': Todo.query.filter(Todo.deadline == today).count(),
+            'week': Todo.query.filter(Todo.deadline >= today, Todo.deadline <= today + timedelta(days=7)).count()
+        }
+    }
 
 
     todos = base_query.all()
@@ -147,7 +109,7 @@ def todo():
 def add_todo():
     content = request.form.get('todo_item')
     deadline_str = request.form.get('deadline')
-    importance = request.form.get('importance', 'medium')
+    importance=request.form.get('importance')
 
     if content:
         try:
@@ -156,7 +118,7 @@ def add_todo():
                 content=content,
                 deadline=deadline,
                 importance=importance,
-                user_id=1  # Replace with current_user.id if using Flask-Login
+                user_id=1  
             )
             db.session.add(todo)
             db.session.commit()
@@ -179,7 +141,7 @@ def edit_todo(todo_id):
     todo = Todo.query.get_or_404(todo_id)
     new_content = request.form.get('edited_todo')
     new_deadline = request.form.get('edited_deadline')
-    new_importance = request.form.get('edited_importance')
+    new_importance = int(request.form.get('edited_importance'))
 
     if new_content:
         try:
@@ -200,7 +162,7 @@ def edit_todo(todo_id):
                           deadline=request.args.get('deadline'),
                           sort=request.args.get('sort')))
 
-# Toggle and Delete routes remain similar but with preserved filters in redirects
+# Toggle and Delete routes 
 
 @flask_todo.route("/todo/delete/<int:todo_id>", methods=['POST'])
 def delete_todo(todo_id):
@@ -213,3 +175,17 @@ def delete_todo(todo_id):
                           importance=request.args.get('importance', 'all'),
                           deadline=request.args.get('deadline', 'all'),
                           sort=request.args.get('sort', 'deadline')))
+
+@flask_todo.route("/todo/toggle/<int:todo_id>", methods=['POST'])
+def toggle_todo(todo_id):
+    todo = Todo.query.get_or_404(todo_id)
+    todo.completed = not todo.completed
+    db.session.commit()
+    flash(f'Todo {"completed" if todo.completed else "reopened"}!', 'success')
+    return redirect(url_for('todo', 
+                          status=request.args.get('status', 'all'),
+                          importance=request.args.get('importance', 'all'),
+                          deadline=request.args.get('deadline', 'all'),
+                          sort=request.args.get('sort', 'deadline')))
+
+

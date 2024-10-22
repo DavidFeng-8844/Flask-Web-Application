@@ -35,6 +35,7 @@ class Todo(db.Model):
     content = db.Column(db.String(200), nullable=False)
     completed = db.Column(db.Boolean, default=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    date_started = db.Column(db.DateTime, default=datetime.utcnow)
     deadline = db.Column(db.Date, nullable=True)
     importance = db.Column(db.String(20), default='low')  # high, medium, low
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

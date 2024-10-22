@@ -5,17 +5,17 @@
         <!-- Add Todo Form -->
         <form method="POST" action="{{ url_for('add_todo') }}" class="mb-4">
             <div class="form-row">
-                <div class="col-md-6 mb-2">
+                <div class="col-md-4 mb-2">
                     <input type="text" class="form-control" name="todo_item" placeholder="Enter a new todo item..." required>
                 </div>
-                <div class="col-md-2 mb-2">
+                <div class="col-md-3 mb-2">
                     <input type="date" class="form-control" name="deadline" required>
                 </div>
-                <div class="col-md-2 mb-2">
+                <div class="col-md-3 mb-2">
                     <select class="form-control" name="importance" required>
-                        <option value="3">High Priority</option>
-                        <option value="2">Medium Priority</option>
-                        <option value="1">Low Priority</option>
+                        <option value="high">High Priority</option>
+                        <option value="medium">Medium Priority</option>
+                        <option value="low">Low Priority</option>
                     </select>
                 </div>
                 <div class="col-md-2 mb-2">
@@ -35,19 +35,19 @@
                     <label class="font-weight-bold">Status:</label>
                     <div class="btn-group btn-group-sm">
                         <a href="{{ url_for('todo', status='all', importance=importance, deadline=deadline) }}" 
-                           class="btn btn-outline-primary {{ 'active' if status == 'all' else '' }}">
+                           class="btn btn-outline-primary {{ 'active' if status_filter == 'all' else '' }}">
                             All
-                            <span class="badge badge-primary ml-1">{{ counts.all }}</span>
+                            <span class="badge badge-primary ml-1">{{ counts.status.all }}</span>
                         </a>
                         <a href="{{ url_for('todo', status='active', importance=importance, deadline=deadline) }}" 
-                           class="btn btn-outline-warning {{ 'active' if status == 'active' else '' }}">
+                           class="btn btn-outline-warning {{ 'active' if status_filter == 'active' else '' }}">
                             Active
-                            <span class="badge badge-warning ml-1">{{ counts.active }}</span>
+                            <span class="badge badge-warning ml-1">{{ counts.status.active }}</span>
                         </a>
                         <a href="{{ url_for('todo', status='completed', importance=importance, deadline=deadline) }}" 
-                           class="btn btn-outline-success {{ 'active' if status == 'completed' else '' }}">
+                           class="btn btn-outline-success {{ 'active' if status_filter == 'completed' else '' }}">
                             Completed
-                            <span class="badge badge-success ml-1">{{ counts.completed }}</span>
+                            <span class="badge badge-success ml-1">{{ counts.status.completed }}</span>
                         </a>
                     </div>
                 </div>
@@ -56,21 +56,25 @@
                 <div class="mb-3">
                     <label class="font-weight-bold">Priority:</label>
                     <div class="btn-group btn-group-sm">
-                        <a href="{{ url_for('todo', status=status, importance='all', deadline=deadline) }}" 
-                           class="btn btn-outline-secondary {{ 'active' if importance == 'all' else '' }}">
-                            All
+                        <a href="{{ url_for('todo', status=status, importance='all', deadline=deadline, sort_by = 'importance') }}" 
+                           class="btn btn-outline-secondary {{ 'active' if importance_filter == 'all' else '' }}">
+                            All 
+                            <span class="badge badge-secondary ml-1">{{ counts.importance.all }}</span>
                         </a>
                         <a href="{{ url_for('todo', status=status, importance='high', deadline=deadline) }}" 
-                           class="btn btn-outline-danger {{ 'active' if importance == 'high' else '' }}">
+                           class="btn btn-outline-danger {{ 'active' if importance_filter == 'high' else '' }}">
                             High
+                            <span class="badge badge-danger ml-1">{{ counts.importance.high }}</span>
                         </a>
                         <a href="{{ url_for('todo', status=status, importance='medium', deadline=deadline) }}" 
-                           class="btn btn-outline-warning {{ 'active' if importance == 'medium' else '' }}">
+                           class="btn btn-outline-warning {{ 'active' if importance_filter == 'medium' else '' }}">
                             Medium
+                            <span class="badge badge-warning ml-1">{{ counts.importance.medium }}</span>
                         </a>
                         <a href="{{ url_for('todo', status=status, importance='low', deadline=deadline) }}" 
-                           class="btn btn-outline-info {{ 'active' if importance == 'low' else '' }}">
+                           class="btn btn-outline-info {{ 'active' if importance_filter == 'low' else '' }}">
                             Low
+                            <span class="badge badge-info ml-1">{{ counts.importance.low }}</span>
                         </a>
                     </div>
                 </div>
@@ -79,21 +83,25 @@
                 <div class="mb-3">
                     <label class="font-weight-bold">Deadline:</label>
                     <div class="btn-group btn-group-sm">
-                        <a href="{{ url_for('todo', status=status, importance=importance, deadline='all') }}" 
-                           class="btn btn-outline-secondary {{ 'active' if deadline == 'all' else '' }}">
+                        <a href="{{ url_for('todo', status=status, importance=importance, deadline='all', sort_by = 'deadline') }}" 
+                           class="btn btn-outline-secondary {{ 'active' if deadline_filter == 'all' else '' }}">
                             All
+                            <span class="badge badge-secondary ml-1">{{ counts.deadline.all }}</span>
                         </a>
                         <a href="{{ url_for('todo', status=status, importance=importance, deadline='overdue') }}" 
-                           class="btn btn-outline-danger {{ 'active' if deadline == 'overdue' else '' }}">
+                           class="btn btn-outline-danger {{ 'active' if deadline_filter == 'overdue' else '' }}">
                             Overdue
+                            <span class="badge badge-danger ml-1">{{ counts.deadline.overdue }}</span>
                         </a>
                         <a href="{{ url_for('todo', status=status, importance=importance, deadline='today') }}" 
-                           class="btn btn-outline-warning {{ 'active' if deadline == 'today' else '' }}">
+                           class="btn btn-outline-warning {{ 'active' if deadline_filter == 'today' else '' }}">
                             Today
+                            <span class="badge badge-warning ml-1">{{ counts.deadline.today }}</span>
                         </a>
                         <a href="{{ url_for('todo', status=status, importance=importance, deadline='week') }}" 
-                           class="btn btn-outline-info {{ 'active' if deadline == 'week' else '' }}">
+                           class="btn btn-outline-info {{ 'active' if deadline_filter == 'week' else '' }}">
                             This Week
+                            <span class="badge badge-info ml-1">{{ counts.deadline.week }}</span>
                         </a>
                     </div>
                 </div>
@@ -121,9 +129,9 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span {% if todo.completed %}class="text-muted" style="text-decoration: line-through"{% endif %}>
                                         {{ todo.content }}
-                                        {% if todo.importance == 3 %}
+                                        {% if todo.importance == 'high' %}
                                             <span class="badge badge-danger">High</span>
-                                        {% elif todo.importance == 2 %}
+                                        {% elif todo.importance == 'medium' %}
                                             <span class="badge badge-warning">Medium</span>
                                         {% else %}
                                             <span class="badge badge-info">Low</span>
@@ -146,7 +154,7 @@
                                 Edit
                             </button>
                             <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="post">
-                                <button type="submit">Delete</button>
+                                <button type="submit" class="btn btn-sm btn-outline-danger"  >Delete</button>
                             </form>                            
                         </div>
                     </div>
