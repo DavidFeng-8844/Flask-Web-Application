@@ -1,4 +1,4 @@
-from app import web_blog
+from app import flask_todo
 if __name__=="__main__":
-        web_blog.run(debug=True)
+        flask_todo.run(debug=True)
 

@@ -1,5 +1,5 @@
 from app import db
-from datetime import datetime
+from datetime import date, datetime
 
 class Property(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -35,7 +35,15 @@ class Todo(db.Model):
     content = db.Column(db.String(200), nullable=False)
     completed = db.Column(db.Boolean, default=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # If you want to associate todos with users
+    deadline = db.Column(db.Date, nullable=True)
+    importance = db.Column(db.String(20), default='low')  # high, medium, low
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    @property
+    def is_overdue(self):
+        if self.deadline:
+            return date.today() > self.deadline and not self.completed
+        return False
 
     def __repr__(self):
-        return f"Todo('{self.content}', '{self.completed}')"
+        return f"Todo('{self.content}', '{self.completed}', '{self.deadline}', '{self.importance}')"

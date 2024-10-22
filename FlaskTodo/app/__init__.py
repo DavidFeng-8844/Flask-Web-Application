@@ -2,11 +2,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
-web_blog = Flask(__name__) # __name__ is the name of the module
-web_blog.config.from_object('config')
-db = SQLAlchemy(web_blog)
-migrate = Migrate(web_blog, db)
-with web_blog.app_context():
+flask_todo = Flask(__name__) # __name__ is the name of the module
+flask_todo.config.from_object('config')
+db = SQLAlchemy(flask_todo)
+migrate = Migrate(flask_todo, db)
+with flask_todo.app_context():
     db.create_all()
 
 
