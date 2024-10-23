@@ -31,7 +31,6 @@
               <div class="navbar-nav mr-auto">
                 <a class="nav-item nav-link" href="{{ url_for('todo') }}">Home</a>
                 <a class="nav-item nav-link" href="{{ url_for('new_task') }}">New Task</a>
-                <a class="nav-item nav-link" href="{{ url_for('calendar') }}">Calendar</a>
                 <a class="nav-item nav-link" href="{{ url_for('recycle_bin') }}">Recycle Bin</a>
               </div>
               <!-- Navbar Right Side -->
@@ -59,7 +58,6 @@
               {% endif %}
             {% endwith %}
             {% block content %}{% endblock %}
-            {% block scripts %}{% endblock scripts %}
           </div>
           <div class="col-md-4">
             <div class="content-section">

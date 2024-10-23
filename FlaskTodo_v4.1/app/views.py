@@ -1,6 +1,6 @@
 from datetime import datetime, date, timedelta
 from unittest import case
-from flask import jsonify, redirect, render_template, flash, request, url_for
+from flask import redirect, render_template, flash, request, url_for
 from app import flask_todo, db
 from app.forms import CalculatorForm, RegistrationForm, LoginForm, TaskForm
 from app.models import User, Post, Todo
@@ -308,23 +308,3 @@ def copy_todo(todo_id):
     
     flash(f'Task "{original_todo.title}" copied successfully!', 'success')
     return redirect(url_for('todo'))
-
-# routes for calender
-@flask_todo.route('/calendar')
-def calendar():
-    return render_template('calendar.html', counts = get_counts())
-
-@flask_todo.route('/api/tasks')
-def get_tasks():
-    tasks = Todo.query.filter(Todo.deadline != None, Todo.soft_delete == False).all()
-    
-    # Convert tasks to a JSON-friendly format
-    events = []
-    for task in tasks:
-        events.append({
-            'title': task.title,
-            'start': task.deadline.strftime('%Y-%m-%d'),
-            'description': task.description,
-        })
-    
-    return jsonify(events)
