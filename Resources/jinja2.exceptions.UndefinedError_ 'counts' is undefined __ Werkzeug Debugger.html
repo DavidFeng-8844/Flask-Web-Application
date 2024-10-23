@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)http://127.0.0.1:5000/task/new -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>jinja2.exceptions.UndefinedError: 'counts' is undefined
+ // Werkzeug Debugger</title>
+    <link rel="stylesheet" href="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/style.css">
+    <link rel="shortcut icon" href="http://127.0.0.1:5000/task/new?__debugger__=yes&amp;cmd=resource&amp;f=console.png">
+    <script src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/debugger.js.download"></script>
+    <script>
+      var CONSOLE_MODE = false,
+          EVALEX = true,
+          EVALEX_TRUSTED = false,
+          SECRET = "uMOSyn6cbC3IBI78kN9x";
+    </script>
+  </head>
+  <body style="background-color: #fff" data-new-gr-c-s-check-loaded="14.1202.0" data-gr-ext-installed="">
+    <div class="debugger">
+<h1>UndefinedError</h1>
+<div class="detail">
+  <p class="errormsg">jinja2.exceptions.UndefinedError: 'counts' is undefined
+</p>
+</div>
+<h2 class="traceback" style="cursor: pointer;">Traceback <em>(most recent call last)</em></h2>
+<div class="traceback">
+  <h3></h3>
+  <ul><li><div class="frame" id="frame-140234981087920">
+  <h4>File <cite class="filename">"/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/app.py"</cite>,
+      line <em class="line">1498</em>,
+      in <code class="function">__call__</code></h4>
+  <div class="source library"><pre class="line before"><span class="ws">    </span>) -&gt; cabc.Iterable[bytes]:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>"""The WSGI server calls the Flask application object as the<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>WSGI application. This calls :meth:`wsgi_app`, which can be<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>wrapped to apply middleware.<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>"""<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line current"><span class="ws">        </span>return self.wsgi_app(environ, start_response)
+<span class="ws">        </span>       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140234981088352">
+  <h4>File <cite class="filename">"/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/app.py"</cite>,
+      line <em class="line">1476</em>,
+      in <code class="function">wsgi_app</code></h4>
+  <div class="source library"><pre class="line before"><span class="ws">            </span>try:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">                </span>ctx.push()<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">                </span>response = self.full_dispatch_request()<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">            </span>except Exception as e:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">                </span>error = e<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line current"><span class="ws">                </span>response = self.handle_exception(e)
+<span class="ws">                </span>           ^^^^^^^^^^^^^^^^^^^^^^^^<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">            </span>except:  # noqa: B001<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">                </span>error = sys.exc_info()[1]<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">                </span>raise<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">            </span>return response(environ, start_response)<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>finally:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140234981088064">
+  <h4>File <cite class="filename">"/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/app.py"</cite>,
+      line <em class="line">1473</em>,
+      in <code class="function">wsgi_app</code></h4>
+  <div class="source library"><pre class="line before"><span class="ws">        </span>ctx = self.request_context(environ)<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>error: BaseException | None = None<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>try:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">            </span>try:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">                </span>ctx.push()<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line current"><span class="ws">                </span>response = self.full_dispatch_request()
+<span class="ws">                </span>           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">            </span>except Exception as e:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">                </span>error = e<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">                </span>response = self.handle_exception(e)<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">            </span>except:  # noqa: B001<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">                </span>error = sys.exc_info()[1]<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140234981084896">
+  <h4>File <cite class="filename">"/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/app.py"</cite>,
+      line <em class="line">882</em>,
+      in <code class="function">full_dispatch_request</code></h4>
+  <div class="source library"><pre class="line before"><span class="ws">            </span>request_started.send(self, _async_wrapper=self.ensure_sync)<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">            </span>rv = self.preprocess_request()<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">            </span>if rv is None:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">                </span>rv = self.dispatch_request()<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>except Exception as e:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line current"><span class="ws">            </span>rv = self.handle_user_exception(e)
+<span class="ws">            </span>     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>return self.finalize_request(rv)<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span> <img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">    </span>def finalize_request(<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>self,<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>rv: ft.ResponseReturnValue | HTTPException,<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140234981088208">
+  <h4>File <cite class="filename">"/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/app.py"</cite>,
+      line <em class="line">880</em>,
+      in <code class="function">full_dispatch_request</code></h4>
+  <div class="source library"><pre class="line before"><span class="ws"></span> <img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>try:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">            </span>request_started.send(self, _async_wrapper=self.ensure_sync)<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">            </span>rv = self.preprocess_request()<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">            </span>if rv is None:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line current"><span class="ws">                </span>rv = self.dispatch_request()
+<span class="ws">                </span>     ^^^^^^^^^^^^^^^^^^^^^^^<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>except Exception as e:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">            </span>rv = self.handle_user_exception(e)<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>return self.finalize_request(rv)<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span> <img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">    </span>def finalize_request(<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140234981088928">
+  <h4>File <cite class="filename">"/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/app.py"</cite>,
+      line <em class="line">865</em>,
+      in <code class="function">dispatch_request</code></h4>
+  <div class="source library"><pre class="line before"><span class="ws">            </span>and req.method == "OPTIONS"<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>):<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">            </span>return self.make_default_options_response()<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span># otherwise dispatch to the handler for that endpoint<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>view_args: dict[str, t.Any] = req.view_args  # type: ignore[assignment]<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line current"><span class="ws">        </span>return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+<span class="ws">        </span>       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span> <img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">    </span>def full_dispatch_request(self) -&gt; Response:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>"""Dispatches the request and on top of that performs request<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>pre and postprocessing as well as HTTP exception catching and<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>error handling.<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140234981089072">
+  <h4>File <cite class="filename">"/mnt/f/Repositories/Web_Application/FlaskTodo/app/views.py"</cite>,
+      line <em class="line">263</em>,
+      in <code class="function">new_task</code></h4>
+  <div class="source "><pre class="line before"><span class="ws">            </span>flash('New task has been added!', 'success')<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">            </span>return redirect(url_for('todo'))<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>except Exception as e:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">            </span>db.session.rollback()<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">            </span>flash('Error adding task.', 'danger')<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line current"><span class="ws">    </span>return render_template('new_task.html', title='Add Task', form=form)
+<span class="ws">    </span>       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span> <img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span># Copy Task button<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span>@flask_todo.route('/todo/copy/&lt;int:todo_id&gt;', methods=['POST'])<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span>def copy_todo(todo_id):<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">    </span># Fetch the original todo item<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140234981089216">
+  <h4>File <cite class="filename">"/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/templating.py"</cite>,
+      line <em class="line">150</em>,
+      in <code class="function">render_template</code></h4>
+  <div class="source library"><pre class="line before"><span class="ws">        </span>a list is given, the first name to exist will be rendered.<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">    </span>:param context: The variables to make available in the template.<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">    </span>"""<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">    </span>app = current_app._get_current_object()  # type: ignore[attr-defined]<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">    </span>template = app.jinja_env.get_or_select_template(template_name_or_list)<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line current"><span class="ws">    </span>return _render(app, template, context)
+<span class="ws">    </span>       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span> <img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span> <img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span>def render_template_string(source: str, **context: t.Any) -&gt; str:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">    </span>"""Render a template from the given source string with the given<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">    </span>context.<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140234981089360">
+  <h4>File <cite class="filename">"/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/templating.py"</cite>,
+      line <em class="line">131</em>,
+      in <code class="function">_render</code></h4>
+  <div class="source library"><pre class="line before"><span class="ws"></span>def _render(app: Flask, template: Template, context: dict[str, t.Any]) -&gt; str:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">    </span>app.update_template_context(context)<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">    </span>before_render_template.send(<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>app, _async_wrapper=app.ensure_sync, template=template, context=context<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">    </span>)<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line current"><span class="ws">    </span>rv = template.render(context)
+<span class="ws">    </span>     ^^^^^^^^^^^^^^^^^^^^^^^^<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">    </span>template_rendered.send(<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>app, _async_wrapper=app.ensure_sync, template=template, context=context<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">    </span>)<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">    </span>return rv<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span> <img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140234981089504">
+  <h4>File <cite class="filename">"/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/jinja2/environment.py"</cite>,
+      line <em class="line">1304</em>,
+      in <code class="function">render</code></h4>
+  <div class="source library"><pre class="line before"><span class="ws">        </span>ctx = self.new_context(dict(*args, **kwargs))<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws"></span> <img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>try:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">            </span>return self.environment.concat(self.root_render_func(ctx))  # type: ignore<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>except Exception:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line current"><span class="ws">            </span>self.environment.handle_exception()
+<span class="ws">            </span>^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span> <img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">    </span>async def render_async(self, *args: t.Any, **kwargs: t.Any) -&gt; str:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>"""This works similar to :meth:`render` but returns a coroutine<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>that when awaited returns the entire rendered template string.  This<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>requires the async feature to be enabled.<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140234981089648">
+  <h4>File <cite class="filename">"/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/jinja2/environment.py"</cite>,
+      line <em class="line">939</em>,
+      in <code class="function">handle_exception</code></h4>
+  <div class="source library"><pre class="line before"><span class="ws">        </span>"""Exception handling helper.  This is used internally to either raise<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>rewritten exceptions or return a rendered traceback for the template.<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>"""<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>from .debug import rewrite_traceback_stack<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws"></span> <img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line current"><span class="ws">        </span>raise rewrite_traceback_stack(source=source)
+<span class="ws">        </span>^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span> <img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">    </span>def join_path(self, template: str, parent: str) -&gt; str:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>"""Join a template with the parent.  By default all the lookups are<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>relative to the loader root so this method returns the `template`<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>parameter unchanged, but if the paths should be relative to the<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140234981089792">
+  <h4>File <cite class="filename">"/mnt/f/Repositories/Web_Application/FlaskTodo/app/templates/new_task.html"</cite>,
+      line <em class="line">1</em>,
+      in <code class="function">top-level template code</code></h4>
+  <div class="source "><pre class="line current"><span class="ws"></span>{% extends "base.html" %}<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span> <img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws"></span>{% block content %}<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">    </span>&lt;div class="content-section"&gt;<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>&lt;h2&gt;Add New Task&lt;/h2&gt;<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>&lt;form method="POST" action="{{ url_for('new_task') }}" novalidate&gt;<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140234981089936">
+  <h4>File <cite class="filename">"/mnt/f/Repositories/Web_Application/FlaskTodo/app/templates/base.html"</cite>,
+      line <em class="line">81</em>,
+      in <code class="function">top-level template code</code></h4>
+  <div class="source "><pre class="line before"><span class="ws">            </span>&lt;canvas id="projectStatusChart" width="400" height="400"&gt;&lt;/canvas&gt;<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">            </span>&lt;!-- Hidden divs to store chart data in JSON format --&gt;<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">            </span>&lt;div id="statusChartData" class="d-none"&gt;<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">              </span>{<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">                </span>"labels": ["Active", "Completed"],<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line current"><span class="ws">                </span>"data": [{{ counts.status.active }}, {{ counts.status.completed }}, {{ counts.status.all - counts.status.active - counts.status.completed }}],<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">                </span>"backgroundColors": ["#ffce56", "#36a2eb", "#ff6384"]<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">              </span>}<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">            </span>&lt;/div&gt;<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">            </span>&lt;div id="priorityChartData" class="d-none"&gt;<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">                </span>{<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140234981090080">
+  <h4>File <cite class="filename">"/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/jinja2/environment.py"</cite>,
+      line <em class="line">487</em>,
+      in <code class="function">getattr</code></h4>
+  <div class="source library"><pre class="line before"><span class="ws">    </span>def getattr(self, obj: t.Any, attribute: str) -&gt; t.Any:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>"""Get an item or attribute of an object but prefer the attribute.<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>Unlike :meth:`getitem` the attribute *must* be a string.<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>"""<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line before"><span class="ws">        </span>try:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line current"><span class="ws">            </span>return getattr(obj, attribute)
+<span class="ws">            </span>       ^^^^^^^^^^^^^^^^^^^^^^^<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>except AttributeError:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">            </span>pass<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>try:<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">            </span>return obj[attribute]<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre>
+<pre class="line after"><span class="ws">        </span>except (TypeError, LookupError, AttributeError):<img src="./jinja2.exceptions.UndefinedError_ &#39;counts&#39; is undefined __ Werkzeug Debugger_files/console.png" title="Open an interactive python shell in this frame"></pre></div>
+</div>
+</li></ul>
+  <blockquote>jinja2.exceptions.UndefinedError: 'counts' is undefined
+</blockquote>
+</div>
+
+<div class="plain hidden">
+    <p>
+      This is the Copy/Paste friendly version of the traceback.
+    </p>
+    <pre>Traceback (most recent call last):
+  File "/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/app.py", line 1498, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/app.py", line 1476, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/f/Repositories/Web_Application/FlaskTodo/app/views.py", line 263, in new_task
+    return render_template('new_task.html', title='Add Task', form=form)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/jinja2/environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/jinja2/environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/mnt/f/Repositories/Web_Application/FlaskTodo/app/templates/new_task.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "/mnt/f/Repositories/Web_Application/FlaskTodo/app/templates/base.html", line 81, in top-level template code
+    "data": [{{ counts.status.active }}, {{ counts.status.completed }}, {{ counts.status.all - counts.status.active - counts.status.completed }}],
+  File "/home/davidfeng/miniconda3/envs/flask_env/lib/python3.12/site-packages/jinja2/environment.py", line 487, in getattr
+    return getattr(obj, attribute)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'counts' is undefined
+</pre>
+</div>
+<div class="explanation">
+  The debugger caught an exception in your WSGI application.  You can now
+  look at the traceback which led to the error.  <span class=""><p>To switch between the interactive traceback and the plaintext one, you can click on the "Traceback" headline. From the text traceback you can also create a paste of it. For code execution mouse-over the frame you want to debug and click on the console icon on the right side.</p><p>You can execute arbitrary Python code in the stack frames and there are some extra helpers available for introspection:</p><ul><li><code>dump()</code> shows all variables in the frame</li><li><code>dump(obj)</code> dumps all that's known about the object</li></ul></span>
+</div>
+      <div class="footer">
+        Brought to you by <strong class="arthur">DON'T PANIC</strong>, your
+        friendly Werkzeug powered traceback interpreter.
+      </div>
+    </div>
+
+    <div class="pin-prompt">
+      <div class="inner">
+        <h3>Console Locked</h3>
+        <p>
+          The console is locked and needs to be unlocked by entering the PIN.
+          You can find the PIN printed out on the standard output of your
+          shell that runs the server.
+        </p><form>
+          <p>PIN:
+            <input type="text" name="pin" size="14">
+            <input type="submit" name="btn" value="Confirm Pin">
+        </p></form>
+      </div>
+    </div>
+  
+
+
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"><template shadowrootmode="open"><style>
+      div.grammarly-desktop-integration {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select:none;
+        user-select:none;
+      }
+
+      div.grammarly-desktop-integration:before {
+        content: attr(data-content);
+      }
+    </style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration></html>

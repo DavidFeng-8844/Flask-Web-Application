@@ -90,17 +90,17 @@
                     <label class="font-weight-bold">Status:</label>
                     <div class="btn-group btn-group-sm">
                         <a href="{{ url_for('todo', status='all', importance=importance, deadline=deadline) }}"
-                           class="btn btn-outline-primary {{ 'active' if status_filter == 'all' else '' }}">
+                           class="btn btn-outline-primary {{ 'active' if status_filter == 'all' else '' }}"  class="status-filter">
                             All
                             <span class="badge badge-primary ml-1">{{ counts.status.all }}</span>
                         </a>
                         <a href="{{ url_for('todo', status='active', importance=importance, deadline=deadline) }}"
-                           class="btn btn-outline-warning {{ 'active' if status_filter == 'active' else '' }}">
+                           class="btn btn-outline-warning {{ 'active' if status_filter == 'active' else '' }}"  class="status-filter">
                             Active
                             <span class="badge badge-warning ml-1">{{ counts.status.active }}</span>
                         </a>
                         <a href="{{ url_for('todo', status='completed', importance=importance, deadline=deadline) }}"
-                           class="btn btn-outline-success {{ 'active' if status_filter == 'completed' else '' }}">
+                           class="btn btn-outline-success {{ 'active' if status_filter == 'completed' else '' }}"  class="status-filter">
                             Completed
                             <span class="badge badge-success ml-1">{{ counts.status.completed }}</span>
                         </a>
@@ -112,22 +112,22 @@
                     <label class="font-weight-bold">Priority:</label>
                     <div class="btn-group btn-group-sm">
                         <a href="{{ url_for('todo', status=status, importance='all', deadline=deadline, sort_by = 'importance') }}"
-                           class="btn btn-outline-secondary {{ 'active' if importance_filter == 'all' else '' }}">
+                           class="btn btn-outline-secondary {{ 'active' if importance_filter == 'all' else '' }}"  class="status-filter">
                             All (Sort by Priority)
                             <span class="badge badge-secondary ml-1">{{ counts.importance.all }}</span>
                         </a>
                         <a href="{{ url_for('todo', status=status, importance='high', deadline=deadline) }}"
-                           class="btn btn-outline-danger {{ 'active' if importance_filter == 'high' else '' }}">
+                           class="btn btn-outline-danger {{ 'active' if importance_filter == 'high' else '' }}"  class="status-filter">
                             High
                             <span class="badge badge-danger ml-1">{{ counts.importance.high }}</span>
                         </a>
                         <a href="{{ url_for('todo', status=status, importance='medium', deadline=deadline) }}"
-                           class="btn btn-outline-warning {{ 'active' if importance_filter == 'medium' else '' }}">
+                           class="btn btn-outline-warning {{ 'active' if importance_filter == 'medium' else '' }}"  class="status-filter">
                             Medium
                             <span class="badge badge-warning ml-1">{{ counts.importance.medium }}</span>
                         </a>
                         <a href="{{ url_for('todo', status=status, importance='low', deadline=deadline) }}"
-                           class="btn btn-outline-info {{ 'active' if importance_filter == 'low' else '' }}">
+                           class="btn btn-outline-info {{ 'active' if importance_filter == 'low' else '' }}"  class="status-filter">
                             Low
                             <span class="badge badge-info ml-1">{{ counts.importance.low }}</span>
                         </a>
@@ -139,22 +139,22 @@
                     <label class="font-weight-bold">Deadline:</label>
                     <div class="btn-group btn-group-sm">
                         <a href="{{ url_for('todo', status=status, importance=importance, deadline='all', sort_by = 'deadline') }}"
-                           class="btn btn-outline-secondary {{ 'active' if deadline_filter == 'all' else '' }}">
+                           class="btn btn-outline-secondary {{ 'active' if deadline_filter == 'all' else '' }}"  class="status-filter">
                             All (Sort by Deadline)
                             <span class="badge badge-secondary ml-1">{{ counts.deadline.all }}</span>
                         </a>
                         <a href="{{ url_for('todo', status=status, importance=importance, deadline='overdue') }}"
-                           class="btn btn-outline-danger {{ 'active' if deadline_filter == 'overdue' else '' }}">
+                           class="btn btn-outline-danger {{ 'active' if deadline_filter == 'overdue' else '' }}"  class="status-filter">
                             Overdue
                             <span class="badge badge-danger ml-1">{{ counts.deadline.overdue }}</span>
                         </a>
                         <a href="{{ url_for('todo', status=status, importance=importance, deadline='today') }}"
-                           class="btn btn-outline-warning {{ 'active' if deadline_filter == 'today' else '' }}">
+                           class="btn btn-outline-warning {{ 'active' if deadline_filter == 'today' else '' }}"  class="status-filter">
                             Today
                             <span class="badge badge-warning ml-1">{{ counts.deadline.today }}</span>
                         </a>
                         <a href="{{ url_for('todo', status=status, importance=importance, deadline='week') }}"
-                           class="btn btn-outline-info {{ 'active' if deadline_filter == 'week' else '' }}">
+                           class="btn btn-outline-info {{ 'active' if deadline_filter == 'week' else '' }}"  class="status-filter">
                             This Week
                             <span class="badge badge-info ml-1">{{ counts.deadline.week }}</span>
                         </a>
@@ -206,7 +206,7 @@
                         <!-- Adjust the buttons into the same flexbox container to ensure they are aligned properly -->
                         <div class="d-flex align-items-center">
                             <!-- Edit Button -->
-                            <button type="button" class="btn btn-sm btn-outline-primary mr-5" style="height: 36px; width: 50px" data-toggle="modal" data-target="#editModal{{ todo.id }}">Edit</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary mr-5" style="height: 36px; width: 50px" data-toggle="modal" data-target="#editModal{{ todo.id }}">View</button>
                         </div>
                     
                         <!-- Delete Button, Positioned in the Top Right with smaller size -->

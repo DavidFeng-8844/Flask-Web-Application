@@ -25,6 +25,30 @@ def login():
         return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
 
+
+def get_counts():
+    today = date.today()
+    return {
+        'status': {
+            'all': Todo.query.filter_by(soft_delete=False).count(),
+            'active': Todo.query.filter_by(completed=False, soft_delete=False).count(),
+            'completed': Todo.query.filter_by(completed=True, soft_delete=False).count()
+        },
+        'importance': {
+            'all': Todo.query.filter_by(soft_delete=False).count(),
+            'high': Todo.query.filter_by(importance='high', soft_delete=False).count(),
+            'medium': Todo.query.filter_by(importance='medium', soft_delete=False).count(),
+            'low': Todo.query.filter_by(importance='low', soft_delete=False).count()
+        },
+        'deadline': {
+            'all': Todo.query.filter(Todo.deadline != None).filter_by(soft_delete=False).count(),
+            'overdue': Todo.query.filter(Todo.deadline < today, Todo.completed == False).filter_by(soft_delete=False).count(),
+            'today': Todo.query.filter(Todo.deadline == today).filter_by(soft_delete=False).count(),
+            'week': Todo.query.filter(Todo.deadline >= today, Todo.deadline <= today + timedelta(days=7)).filter_by(soft_delete=False).count()
+        }
+    }
+
+
 @flask_todo.route("/")
 def todo():
     # Get filter parameters
@@ -90,7 +114,12 @@ def todo():
         }
     }
     todos = base_query.all()
-
+    
+    # Check if the request is an AJAX request
+    # if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+    #     # Render only the todo list part if it's an AJAX request
+    #     return render_template('_todo_list.html', todos=todos)
+    
     return render_template('todo.html',
                          form = TaskForm(),
                          todos=todos,
@@ -100,6 +129,7 @@ def todo():
                          sort_by=sort_by,
                          counts=counts,
                          title='Todo List')
+
 
 @flask_todo.route("/todo/add", methods=['GET', 'POST'])
 def add_todo():
@@ -121,7 +151,7 @@ def add_todo():
         except Exception as e:
             db.session.rollback()
             flash('An error occurred while adding the todo.', 'danger')
-    # return render_template('new_task.html', form=form, title='Add Task')
+
     return redirect(url_for('todo', form=form, title='Add Task'))
 
 
@@ -181,7 +211,7 @@ def delete_todo(todo_id):
 def recycle_bin():
     # Fetch all tasks that are soft-deleted
     deleted_todos = Todo.query.filter_by(soft_delete=True).all()
-    return render_template('recycle_bin.html', todos=deleted_todos, title="Recycle Bin")
+    return render_template('recycle_bin.html', todos=deleted_todos, title="Recycle Bin", counts=get_counts())
 
 
 # Restore and Permanent Delete routes
@@ -254,7 +284,7 @@ def new_task():
         except Exception as e:
             db.session.rollback()
             flash('Error adding task.', 'danger')
-    return render_template('new_task.html', title='Add Task', form=form)
+    return render_template('new_task.html', title='Add Task', form=form, counts = get_counts())
 
 # Copy Task button 
 @flask_todo.route('/todo/copy/<int:todo_id>', methods=['POST'])

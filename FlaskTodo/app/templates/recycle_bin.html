@@ -22,7 +22,9 @@
                 </div>
             {% endfor %}
         {% else %}
-            <p class="text-muted">No tasks in the recycle bin.</p>
+        <div class="alert alert-info">
+            No tasks found in the recycle bin.
+        </div>
         {% endif %}
     </div>
 {% endblock %}

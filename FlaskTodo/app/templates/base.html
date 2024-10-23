@@ -62,14 +62,46 @@
           <div class="col-md-4">
             <div class="content-section">
               <h3>Project Status</h3>
-              <p class='text-muted'>Different projects' progress will be shown here
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-light">Latest Posts</li>
-                  <li class="list-group-item list-group-item-light">Announcements</li>
-                  <li class="list-group-item list-group-item-light">Calendars</li>
-                  <li class="list-group-item list-group-item-light">etc</li>
-                </ul>
-              </p>
+              <!-- Dropdown for selecting chart type -->
+              <div class="form-group">
+                <label for="chartSelector">Select Chart:</label>
+                <select id="chartSelector" class="form-control">
+                    <option value="status">Status</option>
+                    <option value="priority">Priority</option>
+                    <option value="deadline">Deadline</option>
+                </select>
+              </div>
+
+            <!-- Placeholder for the chart -->
+            <canvas id="projectStatusChart" width="400" height="400"></canvas>
+            <!-- Hidden divs to store chart data in JSON format -->
+            <div id="statusChartData" class="d-none">
+              {
+                "labels": ["Active", "Completed"],
+                "data": [{{ counts.status.active }}, {{ counts.status.completed }}, {{ counts.status.all - counts.status.active - counts.status.completed }}],
+                "backgroundColors": ["#ffce56", "#36a2eb", "#ff6384"]
+              }
+            </div>
+            <div id="priorityChartData" class="d-none">
+                {
+                  "labels": ["High", "Medium", "Low"],
+                  "data": [{{ counts.importance.high }}, {{ counts.importance.medium }}, {{ counts.importance.low }}],
+                  "backgroundColors": ["#ff6384", "#ff9f40", "#4bc0c0"]
+                }
+            </div>
+            <div id="deadlineChartData" class="d-none">
+                {
+                  "labels": ["Overdue", "Today", "This Week"],
+                  "data": [{{ counts.deadline.overdue }}, {{ counts.deadline.today }}, {{ counts.deadline.week }}],
+                  "backgroundColors": ["#ff6384", "#36a2eb", "#4bc0c0"]
+                }
+            </div>
+              
+            <!-- Message to display if no data is available -->
+            <div id="noDataMessage" class="alert alert-info" style="display: none;">
+              No near tasks.
+            </div>
+            
             </div>
           </div>
         </div>
@@ -85,5 +117,8 @@
     <script src="{{ url_for('static', filename='js/task-validation.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ url_for('static', filename='js/ajax-actions.js') }}"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/project-status-chart.js') }}"></script>
     </body>
   </html>
