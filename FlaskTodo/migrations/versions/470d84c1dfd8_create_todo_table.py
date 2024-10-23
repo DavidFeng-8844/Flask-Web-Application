@@ -1,8 +1,8 @@
 """create todo table
 
-Revision ID: f8551aabadc2
+Revision ID: 470d84c1dfd8
 Revises: 
-Create Date: 2024-10-22 16:15:08.679371
+Create Date: 2024-10-23 20:27:21.007550
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f8551aabadc2'
+revision = '470d84c1dfd8'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -50,12 +50,16 @@ def upgrade():
     )
     op.create_table('todo',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('content', sa.String(length=200), nullable=False),
+    sa.Column('title', sa.String(length=200), nullable=False),
+    sa.Column('module_code', sa.String(length=8), nullable=False),
+    sa.Column('description', sa.Text(), nullable=True),
     sa.Column('completed', sa.Boolean(), nullable=True),
     sa.Column('date_created', sa.DateTime(), nullable=True),
     sa.Column('deadline', sa.Date(), nullable=True),
     sa.Column('importance', sa.String(length=20), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('to_do_list', sa.PickleType(), nullable=True),
+    sa.Column('soft_delete', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

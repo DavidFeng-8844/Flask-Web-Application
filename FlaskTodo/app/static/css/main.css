@@ -196,3 +196,9 @@ a.article-title:hover {
   background-color: #343a40; /* Dark background */
   border: 1px solid #454d55; /* Border for dark mode */
 }
+
+[data-theme="dark"] .modal-content {
+  background-color: #343a40; /* Dark background */
+  color: #f8f9fa; /* Light text */
+  border: 1px solid #454d55; /* Border for dark mode */
+}
