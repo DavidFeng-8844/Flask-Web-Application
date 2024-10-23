@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Task Calendar</h1>
+    <div id="calendar"></div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<!-- FullCalendar CSS and JS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',  // You can change this to 'dayGridWeek', 'listMonth', etc.
+            events: '/api/tasks',  // Fetch task events from your Flask route
+            eventClick: function(info) {
+                alert('Task: ' + info.event.title + '\nDescription: ' + info.event.extendedProps.description);
+            },
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,dayGridWeek,listMonth'
+            },
+        });
+        calendar.render();
+    });
+</script>
+{% endblock scripts %}
