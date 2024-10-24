@@ -1,8 +1,8 @@
-"""create todo table
+"""Initial migration
 
-Revision ID: 5e360fa963d7
+Revision ID: 9eca06bb2845
 Revises: 
-Create Date: 2024-10-23 22:23:37.267587
+Create Date: 2024-10-24 11:14:15.531924
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '5e360fa963d7'
+revision = '9eca06bb2845'
 down_revision = None
 branch_labels = None
 depends_on = None

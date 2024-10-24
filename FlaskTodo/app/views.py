@@ -5,29 +5,11 @@ from app import flask_todo, db
 from app.forms import CalculatorForm, RegistrationForm, LoginForm, TaskForm
 from app.models import User, Post, Todo
 
-
-@flask_todo.route('/register', methods=['GET', 'POST'])
-def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success') # success is a bootstrap class
-        return redirect(url_for('index'))
-    return render_template('register.html', title='Register', form=form)
-
-@flask_todo.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        if form.email.data == 'el22y2f@leeds.ac.uk' and form.password.data == '123456':
-            flash(f'Account logged in for {form.email.data}!', 'success')
-        else:
-            flash(f'Login Unsuccessful. Please check username and password', 'danger')
-        return redirect(url_for('index'))
-    return render_template('login.html', title='Sign In', form=form)
-
-
 def get_counts():
     today = date.today()
+    # Calculate the start (Monday) and end (Sunday) of the current week
+    start_of_week = today - timedelta(days=(today.weekday() + 1) % 7)  # Sunday
+    end_of_week = start_of_week + timedelta(days=6)  # Sunday
     return {
         'status': {
             'all': Todo.query.filter_by(soft_delete=False).count(),
@@ -44,9 +26,28 @@ def get_counts():
             'all': Todo.query.filter(Todo.deadline != None).filter_by(soft_delete=False).count(),
             'overdue': Todo.query.filter(Todo.deadline < today, Todo.completed == False).filter_by(soft_delete=False).count(),
             'today': Todo.query.filter(Todo.deadline == today).filter_by(soft_delete=False).count(),
-            'week': Todo.query.filter(Todo.deadline >= today, Todo.deadline <= today + timedelta(days=7)).filter_by(soft_delete=False).count()
+            'week': Todo.query.filter(Todo.deadline >= today, Todo.deadline <= end_of_week).filter_by(soft_delete=False).count()
         }
     }
+
+@flask_todo.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        flash(f'Account created for {form.username.data}!', 'success') # success is a bootstrap class
+        return redirect(url_for('index'))
+    return render_template('register.html', title='Register', form=form, counts = get_counts())
+
+@flask_todo.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == 'el22y2f@leeds.ac.uk' and form.password.data == '123456':
+            flash(f'Account logged in for {form.email.data}!', 'success')
+        else:
+            flash(f'Login Unsuccessful. Please check username and password', 'danger')
+        return redirect(url_for('index'))
+    return render_template('login.html', title='Sign In', form=form, counts = get_counts())
 
 
 @flask_todo.route("/")
@@ -73,12 +74,15 @@ def todo():
 
     # Deadline filter
     today = date.today()
+    start_of_week = today - timedelta(days=(today.weekday() + 1) % 7)  # Sunday
+    end_of_week = start_of_week + timedelta(days=6)  # Sunday
+    
     if deadline_filter == 'overdue':
         base_query = base_query.filter(Todo.deadline < today, Todo.completed == False)
     elif deadline_filter == 'today':
         base_query = base_query.filter(Todo.deadline == today)
     elif deadline_filter == 'week':
-        base_query = base_query.filter(Todo.deadline <= today + timedelta(days=7))
+        base_query = base_query.filter(Todo.deadline <= end_of_week)
 
     # Sorting for three different filter
     if sort_by == 'deadline':
@@ -110,7 +114,7 @@ def todo():
             'all': Todo.query.filter(Todo.deadline != None).filter_by(soft_delete=False).count(),
             'overdue': Todo.query.filter(Todo.deadline < today, Todo.completed == False).filter_by(soft_delete=False).count(),
             'today': Todo.query.filter(Todo.deadline == today).filter_by(soft_delete=False).count(),
-            'week': Todo.query.filter(Todo.deadline >= today, Todo.deadline <= today + timedelta(days=7)).filter_by(soft_delete=False).count()
+            'week': Todo.query.filter(Todo.deadline >= today, Todo.deadline <= end_of_week).filter_by(soft_delete=False).count()
         }
     }
     todos = base_query.all()
@@ -204,7 +208,7 @@ def delete_todo(todo_id):
     # Mark the task as soft-deleted
     todo.soft_delete = True
     db.session.commit()
-    flash('Task moved to Recycle Bin.', 'success')
+    flash(f'Task "{todo.title}" moved to Recycle Bin.', 'success')
     return redirect(url_for('todo'))
 
 @flask_todo.route('/recycle_bin')
@@ -213,26 +217,6 @@ def recycle_bin():
     deleted_todos = Todo.query.filter_by(soft_delete=True).all()
     return render_template('recycle_bin.html', todos=deleted_todos, title="Recycle Bin", counts=get_counts())
 
-
-# Restore and Permanent Delete routes
-# @flask_todo.route('/todo/restore/<int:todo_id>', methods=['POST'])
-# def restore_todo(todo_id):
-#     todo = Todo.query.get_or_404(todo_id)
-#     # Mark the task as not deleted
-#     todo.soft_delete = False
-#     db.session.commit()
-#     flash('Task restored successfully!', 'success')
-#     return redirect(url_for('recycle_bin'))
-
-# @flask_todo.route('/todo/permanent_delete/<int:todo_id>', methods=['POST'])
-# def permanent_delete(todo_id):
-#     todo = Todo.query.get_or_404(todo_id)
-#     db.session.delete(todo)
-#     db.session.commit()
-#     flash('Task permanently deleted.', 'danger')
-#     return redirect(url_for('recycle_bin'))
-
-# using ajax to delete
 @flask_todo.route('/todo/restore/<int:todo_id>', methods=['POST'])
 def restore_todo(todo_id):
     todo = Todo.query.get_or_404(todo_id)
@@ -247,6 +231,23 @@ def permanent_delete(todo_id):
     db.session.commit()
     return '', 204  # No content, just a success response for AJAX
 
+# Delete all tasks in recycle bin using ajax
+@flask_todo.route('/todo/delete_all', methods=['POST'])
+def delete_all():
+    Todo.query.filter_by(soft_delete=True).delete()
+    db.session.commit()
+    return redirect(url_for('recycle_bin'))
+
+# delete all completed tasks
+@flask_todo.route('/todo/delete_completed', methods=['POST'])
+def delete_completed():
+    Todo.query.filter_by(completed=True).delete()
+    db.session.commit()
+    flash('All completed tasks have been deleted.', 'success')
+    return redirect(url_for('todo'))
+
+
+
 
 
 @flask_todo.route("/todo/toggle/<int:todo_id>", methods=['POST'])
@@ -254,7 +255,7 @@ def toggle_todo(todo_id):
     todo = Todo.query.get_or_404(todo_id)
     todo.completed = not todo.completed
     db.session.commit()
-    flash(f'Task {"completed" if todo.completed else "reopened"}!', 'success')
+    flash(f'Task "{todo.title}" {"completed" if todo.completed else "reopened"}!', 'success')
     return redirect(url_for('todo', 
                           status=request.args.get('status', 'all'),
                           importance=request.args.get('importance', 'all'),
@@ -263,7 +264,6 @@ def toggle_todo(todo_id):
 
 
 # New Task Route Handler
-
 @flask_todo.route('/task/new', methods=['GET', 'POST'])
 def new_task():
     form = TaskForm()
@@ -312,7 +312,7 @@ def copy_todo(todo_id):
 # routes for calender
 @flask_todo.route('/calendar')
 def calendar():
-    return render_template('calendar.html', counts = get_counts())
+    return render_template('calendar.html', counts = get_counts(), title='Calendar')
 
 @flask_todo.route('/api/tasks')
 def get_tasks():

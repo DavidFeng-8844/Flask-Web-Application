@@ -31,37 +31,19 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
-    
-# class Todo(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     content = db.Column(db.String(200), nullable=False)
-#     completed = db.Column(db.Boolean, default=False)
-#     date_created = db.Column(db.DateTime, default=datetime.utcnow)
-#     deadline = db.Column(db.Date, nullable=True)
-#     importance = db.Column(db.String(20), default='low')  # high, medium, low
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-#     @property
-#     def is_overdue(self):
-#         if self.deadline:
-#             return date.today() > self.deadline and not self.completed
-#         return False
-
-#     def __repr__(self):
-#         return f"Todo('{self.content}', '{self.completed}', '{self.deadline}', '{self.importance}')"
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(200), nullable=False)  # Renamed from content to title
-    module_code = db.Column(db.String(8), nullable=False)  # Format like XJCO1911
-    description = db.Column(db.Text, nullable=True)  # Markdown supported description
+    title = db.Column(db.String(200), nullable=False)  # Title of the Task
+    module_code = db.Column(db.String(8), nullable=False)  # Format like XJCO2011
+    description = db.Column(db.Text, nullable=True)  # Description
     completed = db.Column(db.Boolean, default=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     deadline = db.Column(db.Date, nullable=True)
     importance = db.Column(db.String(20), default='low')  # high, medium, low
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     to_do_list = db.Column(MutableList.as_mutable(PickleType), default=[])
-    soft_delete = db.Column(db.Boolean, default=False)  # New field for soft deletes
+    soft_delete = db.Column(db.Boolean, default=False)  # Field for soft deletes
 
     @property
     def is_overdue(self):

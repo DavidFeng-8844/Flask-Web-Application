@@ -1,5 +1,5 @@
 import os
-
+from flask_wtf.csrf import CSRFProtect
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'flask_todo.db')
