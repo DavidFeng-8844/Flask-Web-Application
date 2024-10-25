@@ -63,7 +63,7 @@ def login():
 @flask_todo.route("/")
 def todo():
     # Get filter parameters
-    status_filter = request.args.get('status', 'all')
+    status_filter = request.args.get('status', 'active')
     importance_filter = request.args.get('importance', 'all')
     deadline_filter = request.args.get('deadline', '')
     sort_by = request.args.get('sort_by', 'all')  # importance, created
@@ -96,6 +96,7 @@ def todo():
 
     if deadline_filter == 'all':
         base_query = base_query.filter(Todo.deadline != None, Todo.completed == False)
+        base_query = base_query.order_by(Todo.deadline)
     elif deadline_filter == 'overdue':
         base_query = base_query.filter(Todo.deadline < today, Todo.completed == False)
     elif deadline_filter == 'today':
