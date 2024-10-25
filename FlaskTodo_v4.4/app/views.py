@@ -6,37 +6,27 @@ from app.models import Todo
 from sqlalchemy.exc import SQLAlchemyError
 
 def get_counts():
-
     today = date.today()
-
     # Calculate the start (Monday) and end (Sunday) of the current week
     start_of_week = today - timedelta(days=(today.weekday() + 1) % 7)  # Sunday
     end_of_week = start_of_week + timedelta(days=6)  # Sunday
-
-    # Move to the first day of the next month, then subtract a day to get the last day of the current month
-    first_day_next_month = (today.replace(day=1) + timedelta(days=31)).replace(day=1)
-    end_of_month = first_day_next_month - timedelta(days=1)
-
-
-    return {    
+    return {
         'status': {
             'all': Todo.query.filter_by(soft_delete=False).count(),
             'active': Todo.query.filter_by(completed=False, soft_delete=False).count(),
             'completed': Todo.query.filter_by(completed=True, soft_delete=False).count()
         },
         'importance': {
-            'all': Todo.query.filter(Todo.completed == False).filter_by(soft_delete=False).count(),
-            'high': Todo.query.filter(Todo.completed == False).filter_by(importance='high', soft_delete=False).count(),
-            'medium': Todo.query.filter(Todo.completed == False).filter_by(importance='medium', soft_delete=False).count(),
-            'low': Todo.query.filter(Todo.completed == False).filter_by(importance='low', soft_delete=False).count()
+            'all': Todo.query.filter_by(soft_delete=False).count(),
+            'high': Todo.query.filter_by(importance='high', soft_delete=False).count(),
+            'medium': Todo.query.filter_by(importance='medium', soft_delete=False).count(),
+            'low': Todo.query.filter_by(importance='low', soft_delete=False).count()
         },
         'deadline': {
-            'all': Todo.query.filter(Todo.deadline != None, Todo.completed == False).filter_by(soft_delete=False).count(),
+            'all': Todo.query.filter(Todo.deadline != None).filter_by(soft_delete=False).count(),
             'overdue': Todo.query.filter(Todo.deadline < today, Todo.completed == False).filter_by(soft_delete=False).count(),
-            'today': Todo.query.filter(Todo.deadline == today, Todo.completed == False).filter_by(soft_delete=False).count(),
-            'week': Todo.query.filter(Todo.deadline > today, Todo.deadline <= end_of_week, Todo.completed == False).filter_by(soft_delete=False).count(),
-            'month': Todo.query.filter(Todo.deadline >= end_of_week, Todo.deadline <= end_of_month, Todo.completed == False).filter_by(soft_delete=False).count(),
-            'future': Todo.query.filter(Todo.deadline > end_of_month, Todo.completed == False).filter_by(soft_delete=False).count()
+            'today': Todo.query.filter(Todo.deadline == today).filter_by(soft_delete=False).count(),
+            'week': Todo.query.filter(Todo.deadline >= today, Todo.deadline <= end_of_week).filter_by(soft_delete=False).count()
         }
     }
 
@@ -65,8 +55,8 @@ def todo():
     # Get filter parameters
     status_filter = request.args.get('status', 'all')
     importance_filter = request.args.get('importance', 'all')
-    deadline_filter = request.args.get('deadline', '')
-    sort_by = request.args.get('sort_by', 'all')  # importance, created
+    deadline_filter = request.args.get('deadline', 'all')
+    sort_by = request.args.get('sort_by', 'all')  # deadline, importance, created
 
     # Base query
     base_query = Todo.query.filter_by(soft_delete=False)
@@ -79,43 +69,30 @@ def todo():
 
     # Importance filter
     if importance_filter in ['high', 'medium', 'low']:
-        base_query = base_query.filter(Todo.completed == False)
         base_query = base_query.filter_by(importance=importance_filter)
 
 
     # Deadline filter
     today = date.today()
-
-    # Calculate the start (Monday) and end (Sunday) of the current week
     start_of_week = today - timedelta(days=(today.weekday() + 1) % 7)  # Sunday
     end_of_week = start_of_week + timedelta(days=6)  # Sunday
 
-    # Move to the first day of the next month, then subtract a day to get the last day of the current month
-    first_day_next_month = (today.replace(day=1) + timedelta(days=31)).replace(day=1)
-    end_of_month = first_day_next_month - timedelta(days=1)
-
-    if deadline_filter == 'all':
-        base_query = base_query.filter(Todo.deadline != None, Todo.completed == False)
-    elif deadline_filter == 'overdue':
+    if deadline_filter == 'overdue':
         base_query = base_query.filter(Todo.deadline < today, Todo.completed == False)
     elif deadline_filter == 'today':
-        base_query = base_query.filter(Todo.deadline == today, Todo.completed == False)
+        base_query = base_query.filter(Todo.deadline == today)
     elif deadline_filter == 'week':
-        base_query = base_query.filter(Todo.deadline > today, Todo.deadline <= end_of_week, Todo.completed == False)
-    elif deadline_filter == 'month':
-        base_query = base_query.filter(Todo.deadline > end_of_week, Todo.deadline <= end_of_month, Todo.completed == False)
-    elif deadline_filter == 'future':
-        base_query = base_query.filter(Todo.deadline > end_of_month, Todo.completed == False)
-
+        base_query = base_query.filter(Todo.deadline <= end_of_week)
 
     # Sorting for three different filter
-    if sort_by == 'importance':
+    if sort_by == 'deadline':
+        base_query = base_query.order_by(Todo.deadline.asc().nulls_last())
+    elif sort_by == 'importance':
         importance_order = db.case(
             (Todo.importance == 'high', 1),
             (Todo.importance == 'medium', 2),
             (Todo.importance == 'low', 3)
         )
-        base_query = base_query.filter(Todo.completed == False)
         base_query = base_query.order_by(importance_order)
     else:
         base_query = base_query.order_by(Todo.date_created.desc())
@@ -128,18 +105,16 @@ def todo():
             'completed': Todo.query.filter_by(completed=True, soft_delete=False).count()
         },
         'importance': {
-            'all': Todo.query.filter(Todo.completed == False).filter_by(soft_delete=False).count(),
-            'high': Todo.query.filter(Todo.completed == False).filter_by(importance='high', soft_delete=False).count(),
-            'medium': Todo.query.filter(Todo.completed == False).filter_by(importance='medium', soft_delete=False).count(),
-            'low': Todo.query.filter(Todo.completed == False).filter_by(importance='low', soft_delete=False).count()
+            'all': Todo.query.filter_by(soft_delete=False).count(),
+            'high': Todo.query.filter_by(importance='high', soft_delete=False).count(),
+            'medium': Todo.query.filter_by(importance='medium', soft_delete=False).count(),
+            'low': Todo.query.filter_by(importance='low', soft_delete=False).count()
         },
         'deadline': {
-            'all': Todo.query.filter(Todo.deadline != None, Todo.completed == False).filter_by(soft_delete=False).count(),
+            'all': Todo.query.filter(Todo.deadline != None).filter_by(soft_delete=False).count(),
             'overdue': Todo.query.filter(Todo.deadline < today, Todo.completed == False).filter_by(soft_delete=False).count(),
-            'today': Todo.query.filter(Todo.deadline == today, Todo.completed == False).filter_by(soft_delete=False).count(),
-            'week': Todo.query.filter(Todo.deadline > today, Todo.deadline <= end_of_week, Todo.completed == False).filter_by(soft_delete=False).count(),
-            'month': Todo.query.filter(Todo.deadline > end_of_week, Todo.deadline <= end_of_month, Todo.completed == False).filter_by(soft_delete=False).count(),
-            'future': Todo.query.filter(Todo.deadline > end_of_month, Todo.completed == False).filter_by(soft_delete=False).count()
+            'today': Todo.query.filter(Todo.deadline == today).filter_by(soft_delete=False).count(),
+            'week': Todo.query.filter(Todo.deadline >= today, Todo.deadline <= end_of_week).filter_by(soft_delete=False).count()
         }
     }
     todos = base_query.all()
