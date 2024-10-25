@@ -1,9 +1,9 @@
-from datetime import datetime, date, timedelta
-from unittest import case
+from datetime import date, timedelta
 from flask import jsonify, redirect, render_template, flash, request, url_for
 from app import flask_todo, db
-from app.forms import CalculatorForm, RegistrationForm, LoginForm, TaskForm
-from app.models import User, Post, Todo
+from app.forms import RegistrationForm, LoginForm, TaskForm
+from app.models import Todo
+from sqlalchemy.exc import SQLAlchemyError
 
 def get_counts():
     today = date.today()
@@ -45,7 +45,7 @@ def login():
         if form.email.data == 'el22y2f@leeds.ac.uk' and form.password.data == '123456':
             flash(f'Account logged in for {form.email.data}!', 'success')
         else:
-            flash(f'Login Unsuccessful. Please check username and password', 'danger')
+            flash('Login Unsuccessful. Please check username and password', 'danger')
         return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form, counts = get_counts())
 
@@ -67,7 +67,7 @@ def todo():
     elif status_filter == 'active':
         base_query = base_query.filter_by(completed=False)
 
-    # Importance filter 
+    # Importance filter
     if importance_filter in ['high', 'medium', 'low']:
         base_query = base_query.filter_by(importance=importance_filter)
 
@@ -76,7 +76,7 @@ def todo():
     today = date.today()
     start_of_week = today - timedelta(days=(today.weekday() + 1) % 7)  # Sunday
     end_of_week = start_of_week + timedelta(days=6)  # Sunday
-    
+
     if deadline_filter == 'overdue':
         base_query = base_query.filter(Todo.deadline < today, Todo.completed == False)
     elif deadline_filter == 'today':
@@ -118,12 +118,12 @@ def todo():
         }
     }
     todos = base_query.all()
-    
+
     # Check if the request is an AJAX request
     # if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
     #     # Render only the todo list part if it's an AJAX request
     #     return render_template('_todo_list.html', todos=todos)
-    
+
     return render_template('todo.html',
                          form = TaskForm(),
                          todos=todos,
@@ -146,13 +146,13 @@ def add_todo():
                 description=form.description.data,
                 deadline=form.deadline.data,
                 importance=form.importance.data,
-                user_id=1  # Assuming the user is logged in with user_id=1 for example
+                user_id=1  # Assuming the user is logged in with user_id=1
             )
             db.session.add(todo)
             db.session.commit()
             flash('New task has been added!', 'success')
             return redirect(url_for('todo'))
-        except Exception as e:
+        except SQLAlchemyError:
             db.session.rollback()
             flash('An error occurred while adding the todo.', 'danger')
 
@@ -174,7 +174,7 @@ def edit_todo(todo_id):
             db.session.commit()
             flash('Todo updated successfully!', 'success')
             return redirect(url_for('todo'))
-        except Exception as e:
+        except SQLAlchemyError:
             db.session.rollback()
             flash('An error occurred while updating the todo.', 'danger')
     elif request.method == 'GET':
@@ -187,7 +187,7 @@ def edit_todo(todo_id):
 
     return redirect(url_for('todo', form=form, title='Edit Task'))
 
-# Toggle and Delete routes 
+# Toggle and Delete routes
 
 # @flask_todo.route("/todo/delete/<int:todo_id>", methods=['POST'])
 # def delete_todo(todo_id):
@@ -195,7 +195,7 @@ def edit_todo(todo_id):
 #     db.session.delete(todo)
 #     db.session.commit()
 #     flash('Todo deleted successfully!', 'success')
-#     return redirect(url_for('todo', 
+#     return redirect(url_for('todo',
 #                           status=request.args.get('status', 'all'),
 #                           importance=request.args.get('importance', 'all'),
 #                           deadline=request.args.get('deadline', 'all'),
@@ -256,7 +256,7 @@ def toggle_todo(todo_id):
     todo.completed = not todo.completed
     db.session.commit()
     flash(f'Task "{todo.title}" {"completed" if todo.completed else "reopened"}!', 'success')
-    return redirect(url_for('todo', 
+    return redirect(url_for('todo',
                           status=request.args.get('status', 'all'),
                           importance=request.args.get('importance', 'all'),
                           deadline=request.args.get('deadline', 'all'),
@@ -286,12 +286,12 @@ def new_task():
             flash('Error adding task.', 'danger')
     return render_template('new_task.html', title='Add Task', form=form, counts = get_counts())
 
-# Copy Task button 
+# Copy Task button
 @flask_todo.route('/todo/copy/<int:todo_id>', methods=['POST'])
 def copy_todo(todo_id):
     # Fetch the original todo item
     original_todo = Todo.query.get_or_404(todo_id)
-    
+
     # Create a new todo item by copying fields from the original one
     new_todo = Todo(
         title=original_todo.title + " (Copy)",  # Modify title to indicate it's a copy
@@ -301,11 +301,11 @@ def copy_todo(todo_id):
         importance=original_todo.importance,
         user_id=original_todo.user_id  # Keep the same user ID
     )
-    
+
     # Add the new todo to the database
     db.session.add(new_todo)
     db.session.commit()
-    
+
     flash(f'Task "{original_todo.title}" copied successfully!', 'success')
     return redirect(url_for('todo'))
 
@@ -317,14 +317,16 @@ def calendar():
 @flask_todo.route('/api/tasks')
 def get_tasks():
     tasks = Todo.query.filter(Todo.deadline != None, Todo.soft_delete == False).all()
-    
+
     # Convert tasks to a JSON-friendly format
     events = []
     for task in tasks:
         events.append({
             'title': task.title,
             'start': task.deadline.strftime('%Y-%m-%d'),
+            'module_code': task.module_code,
             'description': task.description,
+            'importance': task.importance
         })
-    
+
     return jsonify(events)
