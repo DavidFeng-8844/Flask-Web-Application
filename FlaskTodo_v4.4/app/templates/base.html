@@ -1,127 +1,144 @@
 <html>
-    <head>
-      <!-- Meta tags -->
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-      <!-- Bootstrap CSS -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-    <style>
+<head>
+  <!-- Meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+  <style>
     ul#menu li {
-        display:inline;
+      display: inline;
     }
-    </style>
-    {% if title %}
-        <title>{{ title }}</title>
-        {% else %}
-        <title> No title specified</title>
-        {% endif %}
-    <!-- Web favicon with zoom in -->
-    <link rel="icon" href="{{ url_for('static', filename='favicon/favicon.png') }}">
-    </head>
-    <body>
-      <header class="site-header">
-        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-          <div class="container">
-            <a class="navbar-brand mr-4" href="/">FlaskTodo</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarToggle">
-              <div class="navbar-nav mr-auto">
-                <a class="nav-item nav-link" href="{{ url_for('todo') }}">Home</a>
-                <a class="nav-item nav-link" href="{{ url_for('new_task') }}">New Task</a>
-                <a class="nav-item nav-link" href="{{ url_for('calendar') }}">Calendar</a>
-                <a class="nav-item nav-link" href="{{ url_for('recycle_bin') }}">Recycle Bin</a>
-              </div>
-              <!-- Navbar Right Side -->
-              <div class="navbar-nav">
-                <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
-                <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
-                <button id="themeToggleBtn" class="btn btn-outline-light" onclick="toggleTheme()">
-                  <span id="themeIcon" class="fas fa-sun"></span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </nav>
-      </header>
-      <main role="main" class="container">
-        <div class="row">
-          <div class="col-md-8">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-                {% for category, message in messages %}
-                  <div class="alert alert-{{ category }}">
-                    {{ message }}
-                  </div>
-                {% endfor %}
-              {% endif %}
-            {% endwith %}
-            {% block content %}{% endblock %}
-            {% block scripts %}{% endblock scripts %}
-          </div>
-          <div class="col-md-4">
-            <div class="content-section">
-              <h3>Project Status</h3>
-              <!-- Dropdown for selecting chart type -->
-              <div class="form-group">
-                <label for="chartSelector">Select Chart:</label>
-                <select id="chartSelector" class="form-control">
-                    <option value="status">Status</option>
-                    <option value="priority">Priority</option>
-                    <option value="deadline">Deadline</option>
-                </select>
-              </div>
+  </style>
+  {% if title %}
+  <title>{{ title }}</title>
+  {% else %}
+  <title> No title specified</title>
+  {% endif %}
+  <!-- Web favicon with zoom in -->
+  <link rel="icon" href="{{ url_for('static', filename='favicon/favicon.png') }}">
+</head>
 
-            <!-- Placeholder for the chart -->
-            <canvas id="projectStatusChart" width="400" height="400"></canvas>
-            <!-- Hidden divs to store chart data in JSON format -->
-            <div id="statusChartData" class="d-none">
-              {
-                "labels": ["Active", "Completed"],
-                "data": [{{ counts.status.active }}, {{ counts.status.completed }}, {{ counts.status.all - counts.status.active - counts.status.completed }}],
-                "backgroundColors": ["#ffce56", "#36a2eb", "#ff6384"]
-              }
-            </div>
-            <div id="priorityChartData" class="d-none">
-                {
-                  "labels": ["High", "Medium", "Low"],
-                  "data": [{{ counts.importance.high }}, {{ counts.importance.medium }}, {{ counts.importance.low }}],
-                  "backgroundColors": ["#ff6384", "#ff9f40", "#4bc0c0"]
-                }
-            </div>
-            <div id="deadlineChartData" class="d-none">
-                {
-                  "labels": ["Overdue", "Today", "This Week", "Others"],
-                  "data": [{{ counts.deadline.overdue }}, {{ counts.deadline.today }}, {{ counts.deadline.week }}, {{ counts.deadline.all - counts.deadline.overdue - counts.deadline.today - counts.deadline.week }}],
-                  "backgroundColors": ["#ff6384", "#ff9f40", "#ffce56", "#4bc0c0"]
-                }
-            </div>
-              
-            <!-- Message to display if no data is available -->
-            <div id="noDataMessage" class="alert alert-info" style="display: none;">
-              No Tasks Available.
-            </div>
-            
-            </div>
+<body>
+  <header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+      <div class="container">
+        <a class="navbar-brand mr-4" href="/">FlaskTodo</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+          aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarToggle">
+          <div class="navbar-nav mr-auto">
+            <a class="nav-item nav-link" href="{{ url_for('todo') }}">Home</a>
+            <a class="nav-item nav-link" href="{{ url_for('new_task') }}">New Task</a>
+            <a class="nav-item nav-link" href="{{ url_for('calendar') }}">Calendar</a>
+            <a class="nav-item nav-link" href="{{ url_for('recycle_bin') }}">Recycle Bin</a>
+          </div>
+          <!-- Navbar Right Side -->
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+            <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+            <button id="themeToggleBtn" class="btn btn-outline-light" onclick="toggleTheme()">
+              <span id="themeIcon" class="fas fa-sun"></span>
+            </button>
           </div>
         </div>
-      </main>
-      
-    <!-- jQuery, Popper.js, and Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <!-- Include the Local JavaScript file -->
-    <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/task-validation.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ url_for('static', filename='js/ajax-actions.js') }}"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ url_for('static', filename='js/project-status-chart.js') }}"></script>
-    </body>
-  </html>
+      </div>
+    </nav>
+  </header>
+  <main role="main" class="container">
+    <div class="row">
+      <div class="col-md-8">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+        {% block scripts %}{% endblock scripts %}
+      </div>
+      <div class="col-md-4">
+        <div class="content-section">
+          <h3>Project Status</h3>
+          <!-- Dropdown for selecting chart type -->
+          <div class="form-group">
+            <label for="chartSelector">Select Chart:</label>
+            <select id="chartSelector" class="form-control">
+              <option value="status">Status</option>
+              <option value="priority">Priority</option>
+              <option value="deadline">Deadline</option>
+            </select>
+          </div>
+
+          <!-- Placeholder for the chart -->
+          <canvas id="projectStatusChart" width="400" height="400"></canvas>
+          <div id="noDataMessage" style="display: none;">No data available for this chart.</div>
+          <!-- <div id="chartLegend" class="mt-3"></div> -->
+
+          <!-- Hidden divs to store chart data in JSON format -->
+          <div id="statusChartData" class="d-none">
+            {
+            "labels": ["Active", "Completed"],
+            "data": [{{ counts.status.active }}, {{ counts.status.completed }}, {{ counts.status.all -
+            counts.status.active - counts.status.completed }}],
+            "backgroundColors": ["#ffce56", "#36a2eb", "#ff6384"]
+            }
+          </div>
+          <div id="priorityChartData" class="d-none">
+            {
+            "labels": ["High", "Medium", "Low"],
+            "data": [{{ counts.importance.high }}, {{ counts.importance.medium }}, {{ counts.importance.low }}],
+            "backgroundColors": ["#ff6384", "#ff9f40", "#4bc0c0"]
+            }
+          </div>
+          <div id="deadlineChartData" class="d-none">
+            {
+            "labels": ["Overdue", "Today", "This Week","Future this month", "Future"],
+            "data": [{{ counts.deadline.overdue }}, {{ counts.deadline.today }}, {{ counts.deadline.week }},
+            {{counts.deadline.month}}, {{ counts.deadline.all - counts.deadline.overdue - counts.deadline.today -
+            counts.deadline.week - counts.deadline.month }}],
+            "backgroundColors": ["#ff6384", "#ff9f40", "#ffce56", "#36a2eb" , "#4bc0c0"]
+            }
+          </div>
+
+          <!-- Message to display if no data is available -->
+          <div id="noDataMessage" class="alert alert-info" style="display: none;">
+            No Tasks Available.
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- jQuery, Popper.js, and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <!-- Include the Local JavaScript file -->
+  <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/task-validation.js') }}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{{ url_for('static', filename='js/ajax-actions.js') }}"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{{ url_for('static', filename='js/project-status-chart.js') }}"></script>
+</body>
+
+</html>

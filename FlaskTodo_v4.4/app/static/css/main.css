@@ -261,3 +261,14 @@ a.article-title:hover {
 [data-theme="dark"] .fc-list-day-text {
   color: #101111; /* Light text */
 }
+
+/* CSS to style the badge inside select options */
+#deadline-filter option .badge {
+  background-color: #6c757d; /* Secondary color */
+  color: #fff;
+  padding: 0.2em 0.5em;
+  border-radius: 0.75rem;
+  font-size: 0.75em;
+  margin-left: 0.5em;
+  display: inline-block;
+}

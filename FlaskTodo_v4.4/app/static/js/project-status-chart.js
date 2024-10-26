@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     // Retrieve the chart data from the dataset attributes
     var statusData = JSON.parse(document.getElementById('statusChartData').textContent);
     var priorityData = JSON.parse(document.getElementById('priorityChartData').textContent);
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // There is data, show the chart and hide the message
             chartContainer.style.display = 'block';
             noDataMessage.style.display = 'none';
-            
+
             chart.data.labels = chartData.labels;
             chart.data.datasets[0].data = chartData.data;
             chart.data.datasets[0].backgroundColor = chartData.backgroundColors;
@@ -39,9 +39,8 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Handle Chart Toggle
-    document.getElementById('chartSelector').addEventListener('change', function() {
+    document.getElementById('chartSelector').addEventListener('change', function () {
         var selectedChart = this.value;
-
         var chartData;
         if (selectedChart === 'status') {
             chartData = statusData;
