@@ -350,17 +350,41 @@ def copy_todo(todo_id):
 
     flash(f'Task "{original_todo.title}" copied successfully!', 'success')
 
-    current_status = request.args.get('status')
+    # Test filter parameters 
+    current_status = request.form.get('status')
+    current_importance = request.form.get('importance')
+    current_deadline = request.form.get('deadline')
+    print(f'----------------{current_status}------------------', flush=True) 
+    print(f'----------------{current_importance}---------------', flush=True)
+    print(f'----------------{current_deadline}------------------', flush=True)
 
     # Redirect to the appropriate filter based on the completed status
-    if original_todo.completed:
+    if current_status == 'completed':
         return redirect(url_for('todo', status='completed'))
-    elif original_todo.importance == 'high':
+    elif current_status == 'active' and current_importance == '' and current_deadline == '':
+        return redirect(url_for('todo', status='active'))
+    elif current_status == 'all' and current_importance == '' and current_deadline == '':
+        return redirect(url_for('todo', status='all'))
+    elif current_importance == 'all' and current_deadline == '':
+        return redirect(url_for('todo', importance='all'))
+    elif current_importance == 'high':
         return redirect(url_for('todo', importance='high'))
-    elif original_todo.importance == 'medium':
+    elif current_importance == 'medium':
         return redirect(url_for('todo', importance='medium'))
-    elif original_todo.importance == 'low':
+    elif current_importance == 'low':
         return redirect(url_for('todo', importance='low'))
+    elif current_deadline == 'all':
+        return redirect(url_for('todo', deadline='all'))
+    elif current_deadline == 'overdue':
+        return redirect(url_for('todo', deadline='overdue'))
+    elif current_deadline == 'today':
+        return redirect(url_for('todo', deadline='today'))
+    elif current_deadline == 'week':
+        return redirect(url_for('todo', deadline='week'))
+    elif current_deadline == 'month':
+        return redirect(url_for('todo', deadline='month'))
+    elif current_deadline == 'future':
+        return redirect(url_for('todo', deadline='future'))
     else:   
         return redirect(url_for('todo'))
 
