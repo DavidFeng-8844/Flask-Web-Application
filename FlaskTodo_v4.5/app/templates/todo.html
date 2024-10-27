@@ -1,0 +1,319 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="content-section">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Todo List</h2>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTodoModal">
+            Add Task
+        </button>
+    </div>
+
+    <!-- Add Todo Form -->
+    <!-- Add Todo Form in Modal -->
+    <div id="addTodoModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Task</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" action="{{ url_for('add_todo') }}" class="mb-4">
+                    {{ form.hidden_tag() }}
+
+                    <div class="modal-body">
+                        <!-- Title Field -->
+                        <div class="form-group">
+                            {{ form.title.label(class="form-control-label") }}
+                            {{ form.title(class="form-control", placeholder="Enter task title", required=True) }}
+                            {% for error in form.title.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Module Code Field -->
+                        <div class="form-group">
+                            {{ form.module_code.label(class="form-control-label") }}
+                            {{ form.module_code(class="form-control", placeholder="Enter module code", required=True) }}
+                            {% for error in form.module_code.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Description Field -->
+                        <div class="form-group">
+                            {{ form.description.label(class="form-control-label") }}
+                            {{ form.description(class="form-control", rows=4, placeholder="Enter task description") }}
+                            {% for error in form.description.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Deadline Field -->
+                        <div class="form-group">
+                            {{ form.deadline.label(class="form-control-label") }}
+                            {{ form.deadline(class="form-control", required=True) }}
+                            {% for error in form.deadline.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Importance Field -->
+                        <div class="form-group">
+                            {{ form.importance.label(class="form-control-label") }}
+                            {{ form.importance(class="form-control", required=True) }}
+                            {% for error in form.importance.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Filter Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Filters</h5>
+        </div>
+        <div class="card-body">
+            <!-- Status Filters -->
+            <div class="mb-3">
+                <label class="font-weight-bold">Status:</label>
+                <div class="btn-group btn-group-sm">
+                    <a href="{{ url_for('todo', status='all', importance=importance, deadline=deadline) }}"
+                        class="btn btn-outline-primary {{ 'active' if status_filter == 'all' else '' }}"
+                        class="status-filter">
+                        All
+                        <span class="badge badge-primary ml-1">{{ counts.status.all }}</span>
+                    </a>
+                    <a href="{{ url_for('todo', status='active', importance=importance, deadline=deadline) }}"
+                        class="btn btn-outline-warning {{ 'active' if status_filter == 'active' else '' }}"
+                        class="status-filter">
+                        Active
+                        <span class="badge badge-warning ml-1">{{ counts.status.active }}</span>
+                    </a>
+                    <a href="{{ url_for('todo', status='completed', importance=importance, deadline=deadline) }}"
+                        class="btn btn-outline-success {{ 'active' if status_filter == 'completed' else '' }}"
+                        class="status-filter">
+                        Completed
+                        <span class="badge badge-success ml-1">{{ counts.status.completed }}</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Importance Filters -->
+            <div class="mb-3">
+                <label class="font-weight-bold">Priority:</label>
+                <div class="btn-group btn-group-sm">
+                    <a href="{{ url_for('todo', status=status, importance='all', deadline=deadline, sort_by = 'importance') }}"
+                        class="btn btn-outline-secondary {{ 'active' if importance_filter == 'all' else '' }}"
+                        class="status-filter">
+                        All (Sort by Priority)
+                        <span class="badge badge-secondary ml-1">{{ counts.importance.all }}</span>
+                    </a>
+                    <a href="{{ url_for('todo', status=status, importance='high', deadline=deadline) }}"
+                        class="btn btn-outline-danger {{ 'active' if importance_filter == 'high' else '' }}"
+                        class="status-filter">
+                        High
+                        <span class="badge badge-danger ml-1">{{ counts.importance.high }}</span>
+                    </a>
+                    <a href="{{ url_for('todo', status=status, importance='medium', deadline=deadline) }}"
+                        class="btn btn-outline-warning {{ 'active' if importance_filter == 'medium' else '' }}"
+                        class="status-filter">
+                        Medium
+                        <span class="badge badge-warning ml-1">{{ counts.importance.medium }}</span>
+                    </a>
+                    <a href="{{ url_for('todo', status=status, importance='low', deadline=deadline) }}"
+                        class="btn btn-outline-info {{ 'active' if importance_filter == 'low' else '' }}"
+                        class="status-filter">
+                        Low
+                        <span class="badge badge-info ml-1">{{ counts.importance.low }}</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Deadline Filter as Dropdown with Counts -->
+            <div class="mb-3">
+                <label class="font-weight-bold">Deadline:</label>
+                <select class="form-control" id="deadline-filter" data-url="{{ url_for('todo') }}"
+                    onchange="filterTasksByDeadline(this)">
+                    <option value="" disabled selected>Select Deadline Filter</option>
+                    <option value="all" {{ 'selected' if deadline_filter=='all' else '' }}>
+                        All (Sort by Deadline) - {{ counts.deadline.all }} tasks
+                    </option>
+                    <option value="overdue" {{ 'selected' if deadline_filter=='overdue' else '' }}>
+                        Overdue - {{ counts.deadline.overdue }} tasks
+                    </option>
+                    <option value="today" {{ 'selected' if deadline_filter=='today' else '' }}>
+                        Today - {{ counts.deadline.today }} tasks
+                    </option>
+                    <option value="week" {{ 'selected' if deadline_filter=='week' else '' }}>
+                        This Week - {{ counts.deadline.week }} tasks
+                    </option>
+                    <option value="month" {{ 'selected' if deadline_filter=='month' else '' }}>
+                        Future This Month - {{ counts.deadline.month }} tasks
+                    </option>
+                    <option value="future" {{ 'selected' if deadline_filter=='future' else '' }}>
+                        Future - {{ counts.deadline.future }} tasks
+                    </option>
+                </select>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Todo List -->
+    {% if todos %}
+    <div class="list-group">
+        {% for todo in todos %}
+        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center
+                              {% if todo.completed %}list-group-item-success{% endif %}
+                              {% if not todo.completed and todo.is_overdue %}list-group-item-danger{% endif %}">
+            <div class="d-flex align-items-center flex-grow-1">
+                <form method="POST" action="{{ url_for('toggle_todo', todo_id=todo.id) }}" class="mr-3">
+                    <div class="custom-control custom-checkbox">
+                        <input type="hidden" name="status" value="{{ status_filter }}">
+                        <input type="hidden" name="importance" value="{{ importance_filter }}">
+                        <input type="hidden" name="deadline" value="{{ deadline_filter }}">
+                        <input type="checkbox" class="custom-control-input" id="todo{{ todo.id }}" {% if todo.completed
+                            %}checked{% endif %} onChange="this.form.submit()">
+                        <label class="custom-control-label" for="todo{{ todo.id }}"></label>
+                    </div>
+                </form>
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span {% if todo.completed %}class="text-muted" style="text-decoration: line-through" {% endif
+                            %}>
+                            {{ todo.title }}
+                            {% if todo.importance == 'high' %}
+                            <span class="badge badge-danger">High</span>
+                            {% elif todo.importance == 'medium' %}
+                            <span class="badge badge-warning">Medium</span>
+                            {% else %}
+                            <span class="badge badge-info">Low</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <small class="text-muted">
+                        Module Code: {{ todo.module_code }} |
+                        Created: {{ todo.date_created.strftime('%Y-%m-%d %H:%M') }} |
+                        Deadline: {{ todo.deadline.strftime('%Y-%m-%d') }}
+                        {% if not todo.completed and todo.is_overdue %}
+                        <span class="text-danger">(Overdue)</span>
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+            <!-- Adjust the buttons into the same flexbox container to ensure they are aligned properly -->
+            <div class="d-flex align-items-center">
+                <!-- Edit Button -->
+                <button type="button" class="btn btn-sm btn-outline-primary mr-5" style="height: 36px; width: 50px"
+                    data-toggle="modal" data-target="#editModal{{ todo.id }}">View</button>
+            </div>
+
+            <!-- Delete Button, Positioned in the Top Right with smaller size -->
+            <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="post" class="position-absolute"
+                style="top: 6px; right: 6px;">
+                <input type="hidden" name="status" value="{{ status_filter }}">
+                <input type="hidden" name="importance" value="{{ importance_filter }}">
+                <input type="hidden" name="deadline" value="{{ deadline_filter }}">
+                <button type="submit" class="btn btn-xs btn-danger btn-sm" data-toggle="tooltip" data-placement="top"
+                    title="Move this task to Recyle Bin" style="font-size: 0.7rem;">X</button>
+                <!-- add  -->
+            </form>
+
+            <!-- Copy Button, Postioned in the bottom right with mid size -->
+            <form action="{{ url_for('copy_todo', todo_id=todo.id) }}" method="post" class="position-absolute"
+                style="bottom: -10px; right: 6px;">
+                <input type="hidden" name="status" value="{{ status_filter }}">
+                <input type="hidden" name="importance" value="{{ importance_filter }}">
+                <input type="hidden" name="deadline" value="{{ deadline_filter }}">
+                <button type="submit" class="btn btn-xs btn-warning btn-sm" data-toggle="tooltip"
+                    data-placement="bottom" title="Copy this task" style="font-size: 0.7rem;">Copy</button>
+            </form>
+        </div>
+
+        <!-- Edit Todo Modal -->
+        <div class="modal fade editTodoModal" id="editModal{{ todo.id }}" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">View and Edit Task</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" action="{{ url_for('edit_todo', todo_id=todo.id) }}">
+                        {{ form.hidden_tag() }}
+
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <input type="text" class="form-control" name="title" value="{{ todo.title }}" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="module_code">Module Code</label>
+                                <input type="text" class="form-control" name="module_code"
+                                    value="{{ todo.module_code }}" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" name="description"
+                                    rows="4">{{ todo.description }}</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="deadline">Deadline</label>
+                                <input type="date" class="form-control" name="deadline"
+                                    value="{{ todo.deadline.strftime('%Y-%m-%d') }}" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="importance">Importance</label>
+                                <select class="form-control" name="importance" required>
+                                    <option value="" disabled>Select Priority</option>
+                                    <option value="high" {% if todo.importance=='high' %}selected{% endif %}>High
+                                        Priority</option>
+                                    <option value="medium" {% if todo.importance=='medium' %}selected{% endif %}>Medium
+                                        Priority</option>
+                                    <option value="low" {% if todo.importance=='low' %}selected{% endif %}>Low Priority
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        No tasks found matching your current filters.
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/task-filter.js') }}"></script>
+{% endblock scripts %}

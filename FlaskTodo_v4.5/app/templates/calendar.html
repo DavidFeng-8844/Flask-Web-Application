@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Task Calendar</h1>
+    <div id="calendar"></div>
+
+    <!-- Custom Popup for Task Details -->
+    <div id="taskPopup" class="task-popup card shadow">
+        <div class="card-body">
+            <button id="closePopup" type="button" class="close close-popup" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h5 id="popupTitle" class="card-title font-weight-bold"><span></span></h5>
+            <p id="popupModuleCode" class="card-subtitle mb-2 text-muted">Module Code: <span></span></p>
+            <p id="popupDescription" class="card-text">Task Description: <span></span></p>
+            <p id="popupDeadline" class="card-text">Deadline: <span></span></p>
+            <p id="popupImportance" class="card-text">Importance: <span></span></p>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<!-- FullCalendar CSS and JS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+<!-- My Js code -->
+<script src="{{ url_for('static', filename='js/calendar.js') }}"></script>
+<!-- My css -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}">
+{% endblock scripts %}
