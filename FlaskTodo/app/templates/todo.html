@@ -182,6 +182,9 @@
             <div class="d-flex align-items-center flex-grow-1">
                 <form method="POST" action="{{ url_for('toggle_todo', todo_id=todo.id) }}" class="mr-3">
                     <div class="custom-control custom-checkbox">
+                        <input type="hidden" name="status" value="{{ status_filter }}">
+                        <input type="hidden" name="importance" value="{{ importance_filter }}">
+                        <input type="hidden" name="deadline" value="{{ deadline_filter }}">
                         <input type="checkbox" class="custom-control-input" id="todo{{ todo.id }}" {% if todo.completed
                             %}checked{% endif %} onChange="this.form.submit()">
                         <label class="custom-control-label" for="todo{{ todo.id }}"></label>
@@ -221,6 +224,9 @@
             <!-- Delete Button, Positioned in the Top Right with smaller size -->
             <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="post" class="position-absolute"
                 style="top: 6px; right: 6px;">
+                <input type="hidden" name="status" value="{{ status_filter }}">
+                <input type="hidden" name="importance" value="{{ importance_filter }}">
+                <input type="hidden" name="deadline" value="{{ deadline_filter }}">
                 <button type="submit" class="btn btn-xs btn-danger btn-sm" data-toggle="tooltip" data-placement="top"
                     title="Move this task to Recyle Bin" style="font-size: 0.7rem;">X</button>
                 <!-- add  -->
