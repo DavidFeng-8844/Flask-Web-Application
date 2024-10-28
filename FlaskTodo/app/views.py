@@ -12,7 +12,6 @@ def flash_errors(form):
 
 
 def get_counts():
-
     today = date.today()
 
     # Calculate the start (Monday) and end (Sunday) of the current week
@@ -168,6 +167,7 @@ def add_todo():
     if form.validate_on_submit():
         try:
             todo = Todo(
+                id = form.id.data,
                 title=form.title.data,
                 module_code=form.module_code.data,
                 description=form.description.data,
@@ -275,6 +275,7 @@ def new_task():
     if form.validate_on_submit():
         try:
             todo = Todo(
+                id = form.id.data,
                 title=form.title.data,
                 module_code=form.module_code.data,
                 description=form.description.data,
@@ -298,6 +299,7 @@ def copy_todo(todo_id):
 
     # Create a new todo item by copying fields from the original one
     new_todo = Todo(
+        id = original_todo.id*2,  # Increment the ID by 1
         title=original_todo.title + " (Copy)",  # Modify title to indicate it's a copy
         module_code=original_todo.module_code,
         description=original_todo.description,

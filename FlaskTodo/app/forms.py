@@ -12,3 +12,4 @@ class TaskForm(FlaskForm):
     deadline = DateField('Deadline', format='%Y-%m-%d', validators=[DataRequired()])
     importance = SelectField('Importance', choices=[('high', 'High'), ('medium', 'Medium'), ('low', 'Low')], validators=[DataRequired()])
     submit = SubmitField('Add Task')
+    id = StringField('ID')  # Hidden field to store the ID of the task
