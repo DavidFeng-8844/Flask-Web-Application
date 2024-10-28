@@ -3,12 +3,12 @@
 {% block content %}
     <div class="content-section">
         <h2>Add New Task</h2>
-        <form method="POST" action="{{ url_for('new_task') }}" novalidate>
+        <form method="POST" action="{{ url_for('new_task') }}">
             {{ form.hidden_tag() }}
 
             <div class="form-group">
                 {{ form.title.label(class="form-control-label") }}
-                {{ form.title(class="form-control", placeholder="Enter task title", required=True) }}
+                {{ form.title(class="form-control", placeholder="Longer than three characters and not equal to module code", required=True) }}
                 {% for error in form.title.errors %}
                     <span class="text-danger">{{ error }}</span>
                 {% endfor %}
@@ -16,7 +16,7 @@
 
             <div class="form-group">
                 {{ form.module_code.label(class="form-control-label") }}
-                {{ form.module_code(class="form-control", placeholder="Enter Module Code", required=True) }}
+                {{ form.module_code(class="form-control", placeholder="In the format like XJCO2011", required=True) }}
                 {% for error in form.module_code.errors %}
                     <span class="text-danger">{{ error }}</span>
                 {% endfor %}
