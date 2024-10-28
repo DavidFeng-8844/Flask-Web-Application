@@ -1,9 +1,15 @@
 from datetime import date, timedelta
 from flask import jsonify, redirect, render_template, flash, request, url_for
 from app import flask_todo, db
-from app.forms import RegistrationForm, LoginForm, TaskForm
+from app.forms import TaskForm
 from app.models import Todo
 from sqlalchemy.exc import SQLAlchemyError
+
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(f"{getattr(form, field).label.text} - {error}", 'error')
+
 
 def get_counts():
 
@@ -75,26 +81,6 @@ def filter_redirect(todo):
     else:   
         return redirect(url_for('todo'))
 
-@flask_todo.route('/register', methods=['GET', 'POST'])
-def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success') # success is a bootstrap class
-        return redirect(url_for('index'))
-    return render_template('register.html', title='Register', form=form, counts = get_counts())
-
-@flask_todo.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        if form.email.data == 'el22y2f@leeds.ac.uk' and form.password.data == '123456':
-            flash(f'Account logged in for {form.email.data}!', 'success')
-        else:
-            flash('Login Unsuccessful. Please check username and password', 'danger')
-        return redirect(url_for('index'))
-    return render_template('login.html', title='Sign In', form=form, counts = get_counts())
-
-
 @flask_todo.route("/")
 def todo():
     # Get filter parameters
@@ -165,11 +151,6 @@ def todo():
 
     todos = base_query.all()
 
-    # Check if the request is an AJAX request
-    # if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-    #     # Render only the todo list part if it's an AJAX request
-    #     return render_template('_todo_list.html', todos=todos)
-
     return render_template('todo.html',
                          form = TaskForm(),
                          todos=todos,
@@ -191,8 +172,7 @@ def add_todo():
                 module_code=form.module_code.data,
                 description=form.description.data,
                 deadline=form.deadline.data,
-                importance=form.importance.data,
-                user_id=1  # Assuming the user is logged in with user_id=1
+                importance=form.importance.data
             )
             db.session.add(todo)
             db.session.commit()
@@ -201,7 +181,9 @@ def add_todo():
         except SQLAlchemyError:
             db.session.rollback()
             flash('An error occurred while adding the todo.', 'danger')
-
+    else:
+        # If validation fails, errors will be available in form.errors
+        flash_errors(form)
     return redirect(url_for('todo', form=form, title='Add Task'))
 
 
@@ -297,14 +279,13 @@ def new_task():
                 module_code=form.module_code.data,
                 description=form.description.data,
                 deadline=form.deadline.data,
-                importance=form.importance.data,
-                user_id=1  # Assuming a logged-in user with ID 1 for this example
+                importance=form.importance.data
             )
             db.session.add(todo)
             db.session.commit()
             flash('New task has been added!', 'success')
             return redirect(url_for('todo'))
-        except Exception as e:
+        except SQLAlchemyError:
             db.session.rollback()
             flash('Error adding task.', 'danger')
     return render_template('new_task.html', title='Add Task', form=form, counts = get_counts())
@@ -322,7 +303,7 @@ def copy_todo(todo_id):
         description=original_todo.description,
         deadline=original_todo.deadline,
         importance=original_todo.importance,
-        user_id=original_todo.user_id,  # Keep the same user ID
+        # user_id=original_todo.user_id,  # Keep the same user ID
         completed=original_todo.completed
     )
 
