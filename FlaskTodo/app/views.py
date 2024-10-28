@@ -289,6 +289,8 @@ def new_task():
         except SQLAlchemyError:
             db.session.rollback()
             flash('Error adding task.', 'danger')
+    else:
+        flash_errors(form)
     return render_template('new_task.html', title='Add Task', form=form, counts = get_counts())
 
 # Copy Task button

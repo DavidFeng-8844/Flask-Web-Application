@@ -36,6 +36,12 @@ document.addEventListener('DOMContentLoaded', function () {
             valid = false;
         }
 
+        // Title must not be equal to Module code
+        if (title === moduleCode) {
+            showError(form.querySelector('input[name="title"]'), 'Title must not be the same as the module code.');
+            valid = false;
+        }
+
         return valid;
     }
 
