@@ -4,6 +4,8 @@ from app import flask_todo, db
 from app.forms import TaskForm
 from app.models import Todo
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import false, null
+
 
 def flash_errors(form):
     for field, errors in form.errors.items():
@@ -18,67 +20,91 @@ def get_counts():
     start_of_week = today - timedelta(days=(today.weekday() + 1) % 7)  # Sunday
     end_of_week = start_of_week + timedelta(days=6)  # Sunday
 
-    # Move to the first day of the next month, then subtract a day to get the last day of the current month
-    first_day_next_month = (today.replace(day=1) + timedelta(days=31)).replace(day=1)
+    # Move to the first day of the next month
+    # then subtract a day to get the last day of the current month
+    first_day_next_month = (
+        today.replace(day=1) + timedelta(days=31)
+        ).replace(day=1)
     end_of_month = first_day_next_month - timedelta(days=1)
 
-    return {    
+    return {
         'status': {
             'all': Todo.query.filter_by(soft_delete=False).count(),
-            'active': Todo.query.filter_by(completed=False, soft_delete=False).count(),
-            'completed': Todo.query.filter_by(completed=True, soft_delete=False).count()
+            'active': Todo.query.filter_by(completed=False,
+                                           soft_delete=False).count(),
+            'completed': Todo.query.filter_by(completed=True,
+                                              soft_delete=False).count()
         },
         'importance': {
-            'all': Todo.query.filter(Todo.completed == False).filter_by(soft_delete=False).count(),
-            'high': Todo.query.filter(Todo.completed == False).filter_by(importance='high', soft_delete=False).count(),
-            'medium': Todo.query.filter(Todo.completed == False).filter_by(importance='medium', soft_delete=False).count(),
-            'low': Todo.query.filter(Todo.completed == False).filter_by(importance='low', soft_delete=False).count()
+            'all': Todo.query.filter(Todo.completed == false()).
+            filter_by(soft_delete=False).count(),
+            'high': Todo.query.filter(Todo.completed == false()).
+            filter_by(importance='high', soft_delete=False).count(),
+            'medium': Todo.query.filter(Todo.completed == false()).
+            filter_by(importance='medium', soft_delete=False).count(),
+            'low': Todo.query.filter(Todo.completed == false()).
+            filter_by(importance='low', soft_delete=False).count()
         },
         'deadline': {
-            'all': Todo.query.filter(Todo.deadline != None, Todo.completed == False).filter_by(soft_delete=False).count(),
-            'overdue': Todo.query.filter(Todo.deadline < today, Todo.completed == False).filter_by(soft_delete=False).count(),
-            'today': Todo.query.filter(Todo.deadline == today, Todo.completed == False).filter_by(soft_delete=False).count(),
-            'week': Todo.query.filter(Todo.deadline > today, Todo.deadline <= end_of_week, Todo.completed == False).filter_by(soft_delete=False).count(),
-            'month': Todo.query.filter(Todo.deadline >= end_of_week, Todo.deadline <= end_of_month, Todo.completed == False).filter_by(soft_delete=False).count(),
-            'future': Todo.query.filter(Todo.deadline > end_of_month, Todo.completed == False).filter_by(soft_delete=False).count()
+            'all': Todo.query.
+            filter(Todo.deadline.isnot(null()), Todo.completed == false()).
+            filter_by(soft_delete=False).count(),
+            'overdue': Todo.query.
+            filter(Todo.deadline < today, Todo.completed == false()).
+            filter_by(soft_delete=False).count(),
+            'today': Todo.query.
+            filter(Todo.deadline == today, Todo.completed == false()).
+            filter_by(soft_delete=False).count(),
+            'week': Todo.query.
+            filter(Todo.deadline > today,
+                   Todo.deadline <= end_of_week, Todo.completed == false()).
+            filter_by(soft_delete=False).count(),
+            'month': Todo.query.
+            filter(Todo.deadline >= end_of_week,
+                   Todo.deadline <= end_of_month, Todo.completed == false()).
+            filter_by(soft_delete=False).count(),
+            'future': Todo.query.
+            filter(Todo.deadline > end_of_month, Todo.completed == false()).
+            filter_by(soft_delete=False).count()
         }
     }
+
 
 def filter_redirect(todo):
     current_status = request.form.get('status')
     current_importance = request.form.get('importance')
     current_deadline = request.form.get('deadline')
-    print(f'----------------{current_status}------------------', flush=True) 
+
+    print(f'----------------{current_status}------------------', flush=True)
     print(f'----------------{current_importance}---------------', flush=True)
     print(f'----------------{current_deadline}------------------', flush=True)
+
     if current_status == 'completed':
         return redirect(url_for('todo', status='completed'))
-    elif current_status == 'active' and current_importance == '' and current_deadline == '':
-        return redirect(url_for('todo', status='active'))
-    elif current_status == 'all' and current_importance == '' and current_deadline == '':
-        return redirect(url_for('todo', status='all'))
-    elif current_importance == 'all' and current_deadline == '':
+
+    # Redirect based on status
+    if (
+        current_status in {'active', 'all'}
+        and not current_importance
+        and not current_deadline
+    ):
+        return redirect(url_for('todo', status=current_status))
+
+    if current_importance == 'all' and not current_deadline:
         return redirect(url_for('todo', importance='all'))
-    elif current_importance == 'high':
-        return redirect(url_for('todo', importance='high'))
-    elif current_importance == 'medium':
-        return redirect(url_for('todo', importance='medium'))
-    elif current_importance == 'low':
-        return redirect(url_for('todo', importance='low'))
-    elif current_deadline == 'all':
-        return redirect(url_for('todo', deadline='all'))
-    elif current_deadline == 'overdue':
-        return redirect(url_for('todo', deadline='overdue'))
-    elif current_deadline == 'today':
-        return redirect(url_for('todo', deadline='today'))
-    elif current_deadline == 'week':
-        return redirect(url_for('todo', deadline='week'))
-    elif current_deadline == 'month':
-        return redirect(url_for('todo', deadline='month'))
-    elif current_deadline == 'future':
-        return redirect(url_for('todo', deadline='future'))
-    else:   
-        return redirect(url_for('todo'))
+
+    # Redirect based on importance
+    if current_importance in {'high', 'medium', 'low'}:
+        return redirect(url_for('todo', importance=current_importance))
+
+    # Redirect based on deadline
+    if current_deadline in {'all', 'overdue',
+                            'today', 'week', 'month', 'future'}:
+        return redirect(url_for('todo', deadline=current_deadline))
+
+    # Default redirect
+    return redirect(url_for('todo'))
+
 
 @flask_todo.route("/")
 def todo():
@@ -101,7 +127,7 @@ def todo():
 
     # Importance filter
     if importance_filter in ['high', 'medium', 'low']:
-        base_query = base_query.filter(Todo.completed == False)
+        base_query = base_query.filter(Todo.completed == false())
         base_query = base_query.filter_by(importance=importance_filter)
         base_query = base_query.order_by(Todo.deadline)
 
@@ -112,29 +138,38 @@ def todo():
     start_of_week = today - timedelta(days=(today.weekday() + 1) % 7)  # Sunday
     end_of_week = start_of_week + timedelta(days=6)  # Sunday
 
-    # Move to the first day of the next month, then subtract a day to get the last day of the current month
-    first_day_next_month = (today.replace(day=1) + timedelta(days=31)).replace(day=1)
+    # Move to the first day of the next month,
+    # then subtract a day to get the last day of the current month
+    first_day_next_month = (today.replace(day=1) +
+                            timedelta(days=31)).replace(day=1)
     end_of_month = first_day_next_month - timedelta(days=1)
 
     if deadline_filter == 'all':
-        base_query = base_query.filter(Todo.deadline != None, Todo.completed == False)
+        base_query = base_query.filter(Todo.deadline.isnot(null()),
+                                       Todo.completed == false())
         base_query = base_query.order_by(Todo.deadline)
     elif deadline_filter == 'overdue':
-        base_query = base_query.filter(Todo.deadline < today, Todo.completed == False)
+        base_query = base_query.filter(Todo.deadline < today,
+                                       Todo.completed == false())
         base_query = base_query.order_by(Todo.deadline)
     elif deadline_filter == 'today':
-        base_query = base_query.filter(Todo.deadline == today, Todo.completed == False)
+        base_query = base_query.filter(Todo.deadline == today,
+                                       Todo.completed == false())
         base_query = base_query.order_by(Todo.deadline)
     elif deadline_filter == 'week':
-        base_query = base_query.filter(Todo.deadline > today, Todo.deadline <= end_of_week, Todo.completed == False)
+        base_query = base_query.filter(Todo.deadline > today,
+                                       Todo.deadline <= end_of_week,
+                                       Todo.completed == false())
         base_query = base_query.order_by(Todo.deadline)
     elif deadline_filter == 'month':
-        base_query = base_query.filter(Todo.deadline > end_of_week, Todo.deadline <= end_of_month, Todo.completed == False)
+        base_query = base_query.filter(Todo.deadline > end_of_week,
+                                       Todo.deadline <= end_of_month,
+                                       Todo.completed == false())
         base_query = base_query.order_by(Todo.deadline)
     elif deadline_filter == 'future':
-        base_query = base_query.filter(Todo.deadline > end_of_month, Todo.completed == False)
+        base_query = base_query.filter(Todo.deadline > end_of_month,
+                                       Todo.completed == false())
         base_query = base_query.order_by(Todo.deadline)
-
 
     # Sorting for three different filter
     if sort_by == 'importance':
@@ -143,7 +178,7 @@ def todo():
             (Todo.importance == 'medium', 2),
             (Todo.importance == 'low', 3)
         )
-        base_query = base_query.filter(Todo.completed == False)
+        base_query = base_query.filter(Todo.completed == false())
         base_query = base_query.order_by(importance_order)
     else:
         base_query = base_query.order_by(Todo.date_created.desc())
@@ -151,14 +186,14 @@ def todo():
     todos = base_query.all()
 
     return render_template('todo.html',
-                         form = TaskForm(),
-                         todos=todos,
-                         status_filter=status_filter,
-                         importance_filter=importance_filter,
-                         deadline_filter=deadline_filter,
-                         sort_by=sort_by,
-                         counts=get_counts(),
-                         title='Todo List')
+                           form=TaskForm(),
+                           todos=todos,
+                           status_filter=status_filter,
+                           importance_filter=importance_filter,
+                           deadline_filter=deadline_filter,
+                           sort_by=sort_by,
+                           counts=get_counts(),
+                           title='Todo List')
 
 
 @flask_todo.route("/todo/add", methods=['GET', 'POST'])
@@ -167,7 +202,7 @@ def add_todo():
     if form.validate_on_submit():
         try:
             todo = Todo(
-                id = form.id.data,
+                id=form.id.data,
                 title=form.title.data,
                 module_code=form.module_code.data,
                 description=form.description.data,
@@ -215,6 +250,7 @@ def edit_todo(todo_id):
 
     return redirect(url_for('todo', form=form, title='Edit Task'))
 
+
 # Soft Delete route
 @flask_todo.route('/todo/delete/<int:todo_id>', methods=['POST'])
 def delete_todo(todo_id):
@@ -225,11 +261,15 @@ def delete_todo(todo_id):
     flash(f'Task "{todo.title}" moved to Recycle Bin.', 'success')
     return filter_redirect(todo)
 
+
 @flask_todo.route('/recycle_bin')
 def recycle_bin():
     # Fetch all tasks that are soft-deleted
     deleted_todos = Todo.query.filter_by(soft_delete=True).all()
-    return render_template('recycle_bin.html', todos=deleted_todos, title="Recycle Bin", counts=get_counts())
+    return render_template(
+        'recycle_bin.html',
+        todos=deleted_todos, title="Recycle Bin", counts=get_counts())
+
 
 @flask_todo.route('/todo/restore/<int:todo_id>', methods=['POST'])
 def restore_todo(todo_id):
@@ -238,6 +278,7 @@ def restore_todo(todo_id):
     db.session.commit()
     return '', 204  # No content, just a success response for AJAX
 
+
 @flask_todo.route('/todo/permanent_delete/<int:todo_id>', methods=['POST'])
 def permanent_delete(todo_id):
     todo = Todo.query.get_or_404(todo_id)
@@ -245,12 +286,14 @@ def permanent_delete(todo_id):
     db.session.commit()
     return '', 204  # No content, just a success response for AJAX
 
+
 # Delete all tasks in recycle bin using ajax
 @flask_todo.route('/todo/delete_all', methods=['POST'])
 def delete_all():
     Todo.query.filter_by(soft_delete=True).delete()
     db.session.commit()
     return redirect(url_for('recycle_bin'))
+
 
 # delete all completed tasks
 @flask_todo.route('/todo/delete_completed', methods=['POST'])
@@ -260,13 +303,17 @@ def delete_completed():
     flash('All completed tasks have been deleted.', 'success')
     return redirect(url_for('todo'))
 
+
 @flask_todo.route("/todo/toggle/<int:todo_id>", methods=['POST'])
 def toggle_todo(todo_id):
     todo = Todo.query.get_or_404(todo_id)
     todo.completed = not todo.completed
     db.session.commit()
-    flash(f'Task "{todo.title}" {"completed" if todo.completed else "reopened"}!', 'success')
+    flash(f'''Task "{todo.title}"
+          {"completed" if todo.completed else "reopened"}!''', 'success')
+
     return filter_redirect(todo)
+
 
 # New Task Route Handler
 @flask_todo.route('/task/new', methods=['GET', 'POST'])
@@ -275,7 +322,7 @@ def new_task():
     if form.validate_on_submit():
         try:
             todo = Todo(
-                id = form.id.data,
+                id=form.id.data,
                 title=form.title.data,
                 module_code=form.module_code.data,
                 description=form.description.data,
@@ -291,7 +338,9 @@ def new_task():
             flash('Error adding task.', 'danger')
     else:
         flash_errors(form)
-    return render_template('new_task.html', title='Add Task', form=form, counts = get_counts())
+    return render_template('new_task.html', title='Add Task',
+                           form=form, counts=get_counts())
+
 
 # Copy Task button
 @flask_todo.route('/todo/copy/<int:todo_id>', methods=['POST'])
@@ -301,8 +350,7 @@ def copy_todo(todo_id):
 
     # Create a new todo item by copying fields from the original one
     new_todo = Todo(
-        id = original_todo.id*2,  # Increment the ID by 1
-        title=original_todo.title + " (Copy)",  # Modify title to indicate it's a copy
+        title=original_todo.title + " (Copy)",
         module_code=original_todo.module_code,
         description=original_todo.description,
         deadline=original_todo.deadline,
@@ -318,14 +366,18 @@ def copy_todo(todo_id):
     flash(f'Task "{original_todo.title}" copied successfully!', 'success')
     return filter_redirect(original_todo)
 
+
 # routes for calender
 @flask_todo.route('/calendar')
 def calendar():
-    return render_template('calendar.html', counts = get_counts(), title='Calendar')
+    return render_template('calendar.html',
+                           counts=get_counts(), title='Calendar')
+
 
 @flask_todo.route('/api/tasks')
 def get_tasks():
-    tasks = Todo.query.filter(Todo.deadline != None, Todo.soft_delete == False).all()
+    tasks = Todo.query.filter(Todo.deadline.isnot(null()),
+                              Todo.soft_delete == false()).all()
 
     # Convert tasks to a JSON-friendly format
     events = []
