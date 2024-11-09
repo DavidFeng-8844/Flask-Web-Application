@@ -277,6 +277,11 @@ a.article-title:hover {
   color: #dcdcdc;
 }
 
+/* For event titles in calendar*/
+.fc-event-title.fc-sticky {
+  color: black !important;
+}
+
 [data-theme="dark"] h1, 
 [data-theme="dark"] h2, 
 [data-theme="dark"] h3, 

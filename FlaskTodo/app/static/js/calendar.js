@@ -2,6 +2,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
+        dateCellDidMount: function(info) {
+            // Hide cells for dates outside the current month
+            if (info.date.getMonth() !== new Date().getMonth()) {
+              info.el.setAttribute('aria-hidden', 'true');
+            }
+        },
         events: '/api/tasks',  // Fetch task events from your Flask route
         eventClick: function (info) {
             // Prevent the default alert popup
