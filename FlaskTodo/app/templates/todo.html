@@ -205,7 +205,7 @@
                             {% endif %}
                         </span>
                     </div>
-                    <small class="text-muted">
+                    <small class="text-muted task-info">
                         Module Code: {{ todo.module_code }} |
                         Created: {{ todo.date_created.strftime('%Y-%m-%d %H:%M') }} |
                         Deadline: {{ todo.deadline.strftime('%Y-%m-%d') }}
@@ -218,7 +218,7 @@
             <!-- Adjust the buttons into the same flexbox container to ensure they are aligned properly -->
             <div class="d-flex align-items-center">
                 <!-- Edit Button -->
-                <button type="button" class="btn btn-sm btn-outline-primary mr-5" style="height: 36px; width: 50px"
+                <button type="button" class="btn btn-sm btn-outline-primary mr-5 wcag-view-btn" style="height: 36px; width: 50px"
                     data-toggle="modal" data-target="#editModal{{ todo.id }}">View</button>
             </div>
 
