@@ -385,6 +385,12 @@ a.article-title:hover {
   border-color: #66d9ff !important;
 }
 
+.btn-outline-info.active {
+  background-color: #66d9ff !important;
+  color: #000000 !important;
+  border-color: #66d9ff !important;
+}
+
 /* Background color for active buttons */
 [data-theme="dark"] .btn-group .btn.active {
   background-color: #444444 !important;
