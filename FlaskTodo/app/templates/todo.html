@@ -13,7 +13,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add New Task</h5>
+                    <h2 class="modal-title">Add New Task</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -81,12 +81,12 @@
     <!-- Filter Section -->
     <div class="card mb-4">
         <div class="card-header">
-            <h5 class="mb-0">Filters</h5>
+            <h2 class="mb-0">Filters</h2>
         </div>
         <div class="card-body">
             <!-- Status Filters -->
-            <div class="mb-3">
-                <label class="font-weight-bold">Status:</label>
+            <fieldset class="mb-3">
+                <legend class="font-weight-bold">Status:</legend>
                 <div class="btn-group btn-group-sm">
                     <a href="{{ url_for('todo', status='all', importance=importance, deadline=deadline) }}"
                         class="btn btn-outline-primary custom-primary-btn {{ 'active' if status_filter == 'all' else '' }}"
@@ -107,11 +107,11 @@
                         <span class="badge badge-success ml-1 filter-badge" style="background-color: #175E28;">{{ counts.status.completed }}</span>
                     </a>
                 </div>
-            </div>
+            </fieldset>
 
             <!-- Importance Filters -->
-            <div class="mb-3">
-                <label class="font-weight-bold">Priority:</label>
+            <fieldset class="mb-3">
+                <legend class="font-weight-bold">Priority:</legend>
                 <div class="btn-group btn-group-sm">
                     <a href="{{ url_for('todo', status=status, importance='all', deadline=deadline, sort_by = 'importance') }}"
                         class="btn btn-outline-secondary {{ 'active' if importance_filter == 'all' else '' }}"
@@ -140,13 +140,13 @@
                         <span class="badge badge-info ml-1 filter-badge" style="background-color: #0E606C;">{{ counts.importance.low }}</span>
                     </a>
                 </div>
-            </div>
+            </fieldset>
 
             <!-- Deadline Filter as Dropdown with Counts -->
-            <div class="mb-3">
-                <label class="font-weight-bold">Deadline:</label>
+            <fieldset class="mb-3">
+                <legend class="font-weight-bold">Deadline:</legend>
                 <select class="form-control" id="deadline-filter" data-url="{{ url_for('todo') }}"
-                    onchange="filterTasksByDeadline(this)">
+                    aria-live="polite">
                     <option value="" disabled selected>Select Deadline Filter</option>
                     <option value="all" {{ 'selected' if deadline_filter=='all' else '' }}>
                         All (Sort by Deadline) - {{ counts.deadline.all }} tasks
@@ -158,7 +158,7 @@
                         Today - {{ counts.deadline.today }} tasks
                     </option>
                     <option value="week" {{ 'selected' if deadline_filter=='week' else '' }}>
-                        This Week - {{ counts.deadline.week }} tasks
+                        Future This Week - {{ counts.deadline.week }} tasks
                     </option>
                     <option value="month" {{ 'selected' if deadline_filter=='month' else '' }}>
                         Future This Month - {{ counts.deadline.month }} tasks
@@ -167,7 +167,11 @@
                         Future - {{ counts.deadline.future }} tasks
                     </option>
                 </select>
-            </div>
+                <div class="input-group-append">
+                    <button onclick="filterTasksByDeadline()" class="btn btn-primary wcag-add-task-btn">Go</button>
+                </div>
+                <label for="deadline-filter" class="text-muted  mt-2">Select a deadline filter to view tasks</label>
+            </fieldset>
 
 
         </div>
@@ -248,7 +252,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">View and Edit Task</h5>
+                        <h2 class="modal-title">View and Edit Task</h2>
                         <button type="button" class="close" data-dismiss="modal">
                             <span>&times;</span>
                         </button>

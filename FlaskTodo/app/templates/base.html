@@ -35,7 +35,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarToggle">
           <div class="navbar-nav mr-auto">
-            <a class="nav-item nav-link" href="{{ url_for('todo') }}">Home</a>
             <a class="nav-item nav-link" href="{{ url_for('new_task') }}">New Task</a>
             <a class="nav-item nav-link" href="{{ url_for('calendar') }}">Calendar</a>
             <a class="nav-item nav-link" href="{{ url_for('recycle_bin') }}">Recycle Bin</a>
@@ -67,7 +66,7 @@
       </div>
       <div class="col-md-4">
         <div class="content-section">
-          <h3>Project Status</h3>
+          <h2>Project Status</h2>
           <!-- Dropdown for selecting chart type -->
           <div class="form-group">
             <label for="chartSelector">Select Chart:</label>
