@@ -30,6 +30,13 @@ document.addEventListener('DOMContentLoaded', function () {
             valid = false;
         }
 
+        // Description validation, shorter than 100 characters
+        const description = form.querySelector('textarea[name="description"]').value;
+        if (description.length > 100) {
+            showError(form.querySelector('textarea[name="description"]'), 'Description must be shorter than 100 characters.');
+            valid = false;
+        }
+
         // Deadline validation
         if (!deadline) {
             showError(form.querySelector('input[name="deadline"]'), 'Deadline is required.');
