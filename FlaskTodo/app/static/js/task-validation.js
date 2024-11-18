@@ -30,10 +30,10 @@ document.addEventListener('DOMContentLoaded', function () {
             valid = false;
         }
 
-        // Description validation, shorter than 100 characters
+        // Description validation, shorter than 400 characters
         const description = form.querySelector('textarea[name="description"]').value;
-        if (description.length > 100) {
-            showError(form.querySelector('textarea[name="description"]'), 'Description must be shorter than 100 characters.');
+        if (description.length > 400) {
+            showError(form.querySelector('textarea[name="description"]'), 'Description must be shorter than 400 characters.');
             valid = false;
         }
 
