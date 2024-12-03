@@ -7,9 +7,9 @@ from wtforms.validators import DataRequired, Length, Regexp, ValidationError
 class TaskForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(max=200)])
     module_code = StringField('Module Code', validators=[
-        DataRequired(),
-        Regexp(r'^[A-Z]{4}[0-9]{4}$',
-               message="Module code must be in the format: XJCO2011")
+        DataRequired()
+        # Regexp(r'^[A-Z]{4}[0-9]{4}$',
+        #        message="Module code must be in the format: XJCO2011")
     ])
     description = TextAreaField('Description')
     deadline = DateField('Deadline', format='%Y-%m-%d',

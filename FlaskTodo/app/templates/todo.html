@@ -25,7 +25,7 @@
                         <!-- Title Field -->
                         <div class="form-group">
                             {{ form.title.label(class="form-control-label") }}
-                            {{ form.title(class="form-control", placeholder="Longer than three characters and not equal to module code", required=True) }}
+                            {{ form.title(class="form-control", placeholder="Longer than three characters and not equal to module name", required=True) }}
                             {% for error in form.title.errors %}
                             <span class="text-danger">{{ error }}</span>
                             {% endfor %}
@@ -34,7 +34,7 @@
                         <!-- Module Code Field -->
                         <div class="form-group">
                             {{ form.module_code.label(class="form-control-label") }}
-                            {{ form.module_code(class="form-control", placeholder="In the format like XJCO2011", required=True) }}
+                            {{ form.module_code(class="form-control", placeholder="Module Name(code)", required=True) }}
                             {% for error in form.module_code.errors %}
                             <span class="text-danger">{{ error }}</span>
                             {% endfor %}
@@ -175,7 +175,7 @@
 
             <!-- Module Code Filter as Dropdwon with counts  -->
             <fieldset class="mb-3">
-                <legend class="font-weight-bold">Module Code:</legend>
+                <legend class="font-weight-bold">Module Name(Code):</legend>
                 <select class="form-control" id="module-code-filter" data-url="{{ url_for('todo') }}"
                     aria-live="polite">
                     <option value="" disabled selected>Select Module Code Filter</option>
@@ -229,7 +229,7 @@
                         </span>
                     </div>
                     <small class="text-muted task-info">
-                        Module Code: {{ todo.module_code }} |
+                        Module Name(Code): {{ todo.module_code }} |
                         Created: {{ todo.date_created.strftime('%Y-%m-%d %H:%M') }} |
                         Deadline: {{ todo.deadline.strftime('%Y-%m-%d') }}
                         {% if not todo.completed and todo.is_overdue %}
@@ -286,7 +286,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="edit-module{{ todo.id }}">Module Code</label>
+                                <label for="edit-module{{ todo.id }}">Module Name(Code)</label>
                                 <input type="text" class="form-control" id="edit-module{{ todo.id }}" name="module_code"
                                     value="{{ todo.module_code }}" required>
                             </div>

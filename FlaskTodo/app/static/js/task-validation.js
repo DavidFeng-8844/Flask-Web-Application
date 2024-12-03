@@ -25,10 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Module code validation
-        if (!moduleCodeRegex.test(moduleCode)) {
-            showError(form.querySelector('input[name="module_code"]'), 'Module code must be in the format like XJCO2011.');
-            valid = false;
-        }
+        // if (!moduleCodeRegex.test(moduleCode)) {
+        //     showError(form.querySelector('input[name="module_code"]'), 'Module code must be in the format like XJCO2011.');
+        //     valid = false;
+        // }
 
         // Description validation, shorter than 400 characters
         const description = form.querySelector('textarea[name="description"]').value;
