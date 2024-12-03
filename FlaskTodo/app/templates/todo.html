@@ -173,7 +173,26 @@
                 <label for="deadline-filter" class="text-muted  mt-2">Select a deadline filter to view tasks</label>
             </fieldset>
 
-
+            <!-- Module Code Filter as Dropdwon with counts  -->
+            <fieldset class="mb-3">
+                <legend class="font-weight-bold">Module Code:</legend>
+                <select class="form-control" id="module-code-filter" data-url="{{ url_for('todo') }}"
+                    aria-live="polite">
+                    <option value="" disabled selected>Select Module Code Filter</option>
+                    <option value="all" {{ 'selected' if module_code_filter=='all' else '' }}>
+                        All 
+                    </option>
+                    {% for todo in todos %}
+                    <option value="{{ todo.module_code }}" {{ 'selected' if module_code_filter==todo.module_code else '' }}>
+                        {{ todo.module_code }} 
+                    </option>
+                    {% endfor %}
+                </select>
+                <div class="input-group-append">
+                    <button onclick="filterTasksByModuleCode()" class="btn btn-primary wcag-add-task-btn" style="margin-top: 10px;">Go</button>
+                </div>
+                <label for="module-code-filter" class="text-muted  mt-2">Select a module code filter to view tasks</label>
+            </fieldset>
         </div>
     </div>
 

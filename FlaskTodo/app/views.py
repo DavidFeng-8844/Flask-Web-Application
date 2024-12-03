@@ -112,6 +112,7 @@ def todo():
     status_filter = request.args.get('status', 'active')
     importance_filter = request.args.get('importance', 'all')
     deadline_filter = request.args.get('deadline', '')
+    module_code_filter = request.args.get('module_code', '')
     sort_by = request.args.get('sort_by', 'all')  # importance, created
 
     # Base query
@@ -170,6 +171,10 @@ def todo():
         base_query = base_query.filter(Todo.deadline > end_of_month,
                                        Todo.completed == false())
         base_query = base_query.order_by(Todo.deadline)
+
+    # Sort by module code
+    if module_code_filter:
+        base_query = base_query.filter(Todo.module_code == module_code_filter)
 
     # Sorting for three different filter
     if sort_by == 'importance':
