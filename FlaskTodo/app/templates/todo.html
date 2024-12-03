@@ -182,10 +182,14 @@
                     <option value="all" {{ 'selected' if module_code_filter=='all' else '' }}>
                         All 
                     </option>
+                    {% set seen_module_codes = [] %}
                     {% for todo in todos %}
-                    <option value="{{ todo.module_code }}" {{ 'selected' if module_code_filter==todo.module_code else '' }}>
-                        {{ todo.module_code }} 
-                    </option>
+                        {% if todo.module_code not in seen_module_codes %}
+                            <option value="{{ todo.module_code }}" {{ 'selected' if module_code_filter==todo.module_code else '' }}>
+                                {{ todo.module_code }} 
+                            </option>
+                            {% set _ = seen_module_codes.append(todo.module_code) %}
+                        {% endif %}
                     {% endfor %}
                 </select>
                 <div class="input-group-append">
