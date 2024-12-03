@@ -182,6 +182,7 @@
                     <option value="all" {{ 'selected' if module_code_filter=='all' else '' }}>
                         All 
                     </option>
+                    <!-- Avoid duplicated module code -->
                     {% set seen_module_codes = [] %}
                     {% for todo in todos %}
                         {% if todo.module_code not in seen_module_codes %}
