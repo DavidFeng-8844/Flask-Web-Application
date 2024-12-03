@@ -115,7 +115,7 @@ def todo():
     sort_by = request.args.get('sort_by', 'all')  # importance, created
 
     # Base query
-    base_query = Todo.query.filter_by(soft_delete=False)
+    base_query = Todo.query.filter_by(soft_delete=False).order_by(Todo.deadline)
 
     # Status filter
     if status_filter == 'all':

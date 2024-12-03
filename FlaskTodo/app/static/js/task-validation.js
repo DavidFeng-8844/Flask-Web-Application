@@ -37,9 +37,9 @@ document.addEventListener('DOMContentLoaded', function () {
             valid = false;
         }
 
-        // Deadline validation
-        if (!deadline) {
-            showError(form.querySelector('input[name="deadline"]'), 'Deadline is required.');
+        // Deadline validation before 22 century
+        if (new Date(deadline) > new Date('2100-12-31')) {
+            showError(form.querySelector('input[name="deadline"]'), 'Deadline must be before the 22nd century.');
             valid = false;
         }
 

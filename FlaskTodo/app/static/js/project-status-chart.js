@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var priorityData = JSON.parse(document.getElementById('priorityChartData').textContent);
     var deadlineData = JSON.parse(document.getElementById('deadlineChartData').textContent);
 
-    // Initial Chart Setup (Deadline as default)
+    // Initial Chart Setup (Status as default)
     var ctx = document.getElementById('projectStatusChart').getContext('2d');
     var noDataMessage = document.getElementById('noDataMessage');
     var chartContainer = document.getElementById('projectStatusChart');
@@ -30,10 +30,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var chart = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: deadlineData.labels,
+            labels: statusData.labels,
             datasets: [{
-                data: deadlineData.data,
-                backgroundColor: deadlineData.backgroundColors
+                data: statusData.data,
+                backgroundColor: statusData.backgroundColors
             }]
         }
     });
@@ -50,12 +50,10 @@ document.addEventListener("DOMContentLoaded", function () {
             chartData = deadlineData;
         }
 
+        // Render the appropriate chart or show "no data" message
         renderChart(chartData);
     });
 
-    // Set the default dropdown value to 'deadline'
-    document.getElementById('chartSelector').value = 'deadline';
-
-    // Render the initial chart with deadline data
-    renderChart(deadlineData);
+    // Render the initial chart (status by default)
+    renderChart(statusData);
 });
