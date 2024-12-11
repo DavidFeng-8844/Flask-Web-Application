@@ -1,0 +1,102 @@
+/* Styling for the popup */
+.task-popup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.task-popup-content {
+    text-align: left;
+}
+
+/* 
+.close-popup {
+    float: right;
+    cursor: pointer;
+    font-weight: bold;
+} */
+
+/* Card styling from Bootstrap */
+.task-popup .card {
+    border: none;
+    padding: 1rem;
+}
+
+.task-popup .card-body {
+    text-align: left;
+}
+
+.close-popup {
+    float: right;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #888;
+}
+
+/* Add a little hover effect on the close button */
+.close-popup:hover {
+    color: #333;
+}
+
+/* Importance Text Colors */
+.text-high {
+    color: #ff4c4c;
+    /* Red for high importance */
+}
+
+.text-medium {
+    color: #ffb74d;
+    /* Orange for medium importance */
+}
+
+.text-low {
+    color: #17A2B8;
+    /* Green for low importance */
+}
+
+
+/* Dark Mode Styles */
+/* Specific Elements */
+[data-theme="dark"] #calendar {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border-color: #333333;
+}
+
+/* Popup Modal */
+[data-theme="dark"] .task-popup {
+    background-color: #2c2c2c;
+    color: #ffffff;
+    border-color: #444444;
+}
+
+/* Button Colors */
+[data-theme="dark"] .btn {
+    background-color: #333333;
+    color: #ffffff;
+}
+
+[data-theme="dark"] .btn:hover {
+    background-color: #555555c5;
+}
+
+/* Importance Colors */
+[data-theme="dark"] .high-importance {
+    background-color: #ff6666;
+}
+
+[data-theme="dark"] .medium-importance {
+    background-color: #ffcc66;
+}
+
+[data-theme="dark"] .low-importance {
+    background-color: #66ff66;
+}

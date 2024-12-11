@@ -375,8 +375,9 @@ def copy_todo(todo_id):
 # routes for calender
 @flask_todo.route('/calendar')
 def calendar():
+    form = TaskForm()
     return render_template('calendar.html',
-                           counts=get_counts(), title='Calendar')
+                           counts=get_counts(), form=form, title='Calendar')
 
 
 @flask_todo.route('/api/tasks')

@@ -4,6 +4,77 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Calendar</h1>
+        <button type="button" class="btn btn-primary wcag-add-task-btn" data-toggle="modal" data-target="#addTodoModal">
+            Add Task
+        </button>
+    </div>
+    <!-- Add Todo Form in Modal -->
+    <div id="addTodoModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Add New Task</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" action="{{ url_for('add_todo') }}" class="mb-4" role="form">
+                    {{ form.hidden_tag() }}
+
+                    <div class="modal-body">
+                        <!-- Title Field -->
+                        <div class="form-group">
+                            {{ form.title.label(class="form-control-label") }}
+                            {{ form.title(class="form-control", placeholder="Longer than three characters and not equal to module name", required=True) }}
+                            {% for error in form.title.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Module Code Field -->
+                        <div class="form-group">
+                            {{ form.module_code.label(class="form-control-label") }}
+                            {{ form.module_code(class="form-control", placeholder="Module Name(code)", required=True) }}
+                            {% for error in form.module_code.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Description Field -->
+                        <div class="form-group">
+                            {{ form.description.label(class="form-control-label") }}
+                            {{ form.description(class="form-control", rows=4, placeholder="Enter task description") }}
+                            {% for error in form.description.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Deadline Field -->
+                        <div class="form-group">
+                            {{ form.deadline.label(class="form-control-label") }}
+                            {{ form.deadline(class="form-control", required=True) }}
+                            {% for error in form.deadline.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Importance Field -->
+                        <div class="form-group">
+                            {{ form.importance.label(class="form-control-label") }}
+                            {{ form.importance(class="form-control", required=True) }}
+                            {% for error in form.importance.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
     <div id="calendar"></div>
 

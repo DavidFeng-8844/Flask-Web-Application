@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Recycle Bin</h1>
+        <!-- permanet delete all -->
+        <form method="POST" action="{{ url_for('delete_all') }}" id="permanent-delete-all">
+            <button type="submit" class="btn btn-sm wcag-delete-btn">Clear All</button>
+        </form>
+    </div>
+
+    <div class="list-group" id="recycle-bin-list">
+        {% if todos %}
+            {% for todo in todos %}
+                <div class="list-group-item d-flex justify-content-between align-items-center" id="todo-{{ todo.id }}">
+                    <div>
+                        <span>{{ todo.title }} - {{ todo.module_code }}</span>
+                        <small class="text-muted">Deadline: {{ todo.deadline.strftime('%Y-%m-%d') }}</small>
+                    </div>
+                    <div class="btn-group">
+                        <!-- Restore Button -->
+                        <form method="POST" action="{{ url_for('restore_todo', todo_id=todo.id) }}" class="ajax-form" data-id="{{ todo.id }}">
+                            <button type="submit" class="btn btn-sm custom-restore-btn">Restore</button>
+                        </form>
+                    </div>
+                    <!-- Permanent Delete Button -->
+                    <form method="POST" action="{{ url_for('permanent_delete', todo_id=todo.id) }}" class="ajax-form" data-id="{{ todo.id }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger wcag-delete-btn">Delete Permanently</button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+        <div class="alert alert-info">
+            No tasks found in the recycle bin.
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
