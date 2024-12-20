@@ -1,9 +1,22 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="card article">
-        <div class="card-header">
-            <img  class="account-img rounded-circle" src="{{ get_file_url('profile_pics/' + post.author.image_file) }}">
-            <a class="text-dark user-link" href="{{ url_for('get_user', username=post.author.username) }}">{{ post.author.username }}</a>
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <img class="account-img rounded-circle" src="{{ get_file_url('profile_pics/' + post.author.image_file) }}">
+                <a class="text-dark user-link ml-2" href="{{ url_for('get_user', username=post.author.username) }}">{{ post.author.username }}</a>
+            </div>
+            {% if current_user.is_authenticated %}
+            <div class="">
+                <small class="">
+                        {% if current_user.is_following(user) %}
+                            <a href="{{ url_for('unfollow_user') }}" class="btn btn-secondary" id="flw">Following</a>
+                        {% elif user != current_user %}
+                            <a href="{{ url_for('follow_user') }}" class="btn btn-primary" id="flw">Follow</a>
+                        {% endif %}
+                </small>
+            </div>
+            {% endif %}
         </div>
 
         {% if post.media %}
@@ -14,7 +27,7 @@
         <div class="card-body pb-2">
             <div class="card-text post-meta-data">
                 {% if post.user_liked(current_user) %}
-                        <span id="l-{{ post.pid }}" class="up-info like liked"><i class='fas fa-heart'></i></span>
+                    <span id="l-{{ post.pid }}" class="up-info like liked"><i class='fas fa-heart'></i></span>
                 {% else %}
                     <span id="l-{{ post.pid }}" class="up-info like"><i class='far fa-heart'></i></span>
                 {% endif %}

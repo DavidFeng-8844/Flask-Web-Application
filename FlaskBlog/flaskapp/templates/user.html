@@ -20,9 +20,9 @@
                     <div class="">
                         <small class="">
                                 {% if current_user.is_following(user) %}
-                                    <button class="btn btn-secondary" id="flw">Following</button>
+                                    <a href="{{ url_for('unfollow_user', username=user.username) }}" class="btn btn-secondary" id="flw">Following</a>
                                 {% elif user != current_user %}
-                                    <button class="btn btn-primary" id="flw">Follow</button>
+                                    <a href="{{ url_for('follow_user', username=user.username) }}" class="btn btn-primary" id="flw">Follow</a>
                                 {% endif %}
                         </small>
                     </div>

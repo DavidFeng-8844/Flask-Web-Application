@@ -82,9 +82,9 @@
                     {{ user.username }}
                 </a>
                 {% if current_user.is_following(user) %}
-                    <a href="" class="mt-1 float-right flw-sug text-secondary" id="s-{{user.uid}}">Following</a>
+                    <a href="{{ url_for('unfollow_user', username=user.username) }}" class="mt-1 float-right flw-sug text-secondary" id="s-{{user.uid}}">Following</a>
                 {% elif user != current_user %}
-                    <a href="" class="mt-1 float-right flw-sug text-primary" id="s-{{user.uid}}">Follow</a>
+                    <a href="{{ url_for('follow_user', username=user.username) }}" class="mt-1 float-right flw-sug text-primary" id="s-{{user.uid}}">Follow</a>
                 {% endif %}
                 
             </li>

@@ -140,7 +140,7 @@ def login_email():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('register'))
+    return redirect(url_for('login_username'))
 
 
 
@@ -170,10 +170,11 @@ def get_user(username):
 
 @app.route("/post/id/<int:post_id>")
 def get_post(post_id):
+    user = current_user
     # post_id = request.args.get('post_id')
     post = Post.query.get_or_404(int(post_id))
 
-    return render_template("post.html", title="FlaskBlog", post=post, get_file_url=get_file_url)
+    return render_template("post.html", title="FlaskBlog", post=post, get_file_url=get_file_url, user=user)
 
 
 
@@ -217,39 +218,97 @@ def account():
 
 
 
+# @app.route("/follow", methods=['GET', 'POST'])
+# @login_required
+# def follow_user():
+#     # user_id = int(request.args.get('id'))
+#     if request.method == 'GET':
+#         username = request.args.get('username')
+#     else:
+#         username = request.form['username']
+#     print(username)
+#     user = User.query.filter_by(username=username).first()
+#     current_user.follow(user)
+#     db.session.commit()
+#     flash(f"You are now following {username}", 'success')
+
+#     return jsonify(result=username + " followed")
+#     # return redirect(url_for('get_user', username=user.username))
+
 @app.route("/follow", methods=['GET', 'POST'])
 @login_required
 def follow_user():
-    # user_id = int(request.args.get('id'))
-    if request.method == 'GET':
-        username = request.args.get('username')
-    else:
-        username = request.form['username']
-    print(username)
+    # get username
+    username = request.args.get('username') if request.method == 'GET' else request.form.get('username')
+
+    # if no username provided, return error
+    if not username:
+        flash("No username provided.", 'danger')
+        return jsonify(result="No username provided"), 400
+
+    # query user
     user = User.query.filter_by(username=username).first()
-    current_user.follow(user)
-    db.session.commit()
-    # flash(f"You are now following {username}", 'success')
 
-    return jsonify(result=username + " followed")
-    # return redirect(url_for('get_user', username=user.username))
+    # if user not found, return error
+    if not user:
+        flash(f"User '{username}' not found.", 'danger')
+        return jsonify(result=f"User '{username}' not found"), 404
+
+    # if user is current user, return error
+    if current_user != user:
+        current_user.follow(user)
+        db.session.commit()
+        flash(f"You are now following {username}", 'success')
+        return redirect(url_for('get_user', username=user.username))
+    else:
+        flash("You cannot follow yourself.", 'warning')
+        return jsonify(result="Cannot follow yourself"), 400
 
 
 
-@app.route("/unfollow", methods=['POST'])
+
+# @app.route("/unfollow", methods=['POST'])
+# @login_required
+# def unfollow_user(username):
+#     # user_id = int(request.args.get('id'))
+#     username = request.form['username']
+#     user = User.query.filter_by(username=username).first()
+#     current_user.unfollow(user)
+#     db.session.commit()
+#     print(username)
+#     # flash(f"{username} unfollowed", 'success')
+
+#     return jsonify(result=username + " unfollowed")
+#     # return redirect(url_for('get_user', username=user.username))
+
+@app.route("/unfollow", methods=['GET', 'POST'])
 @login_required
 def unfollow_user():
-    # user_id = int(request.args.get('id'))
-    username = request.form['username']
+    # get username
+    username = request.args.get('username') if request.method == 'GET' else request.form.get('username')
+
+    # if no username provided, return error
+    if not username:
+        flash("No username provided.", 'danger')
+        return jsonify(result="No username provided"), 400
+
+    # query user
     user = User.query.filter_by(username=username).first()
-    current_user.unfollow(user)
-    db.session.commit()
-    print(username)
-    # flash(f"{username} unfollowed", 'success')
 
-    return jsonify(result=username + " unfollowed")
-    # return redirect(url_for('get_user', username=user.username))
+    # if user not found, return error
+    if not user:
+        flash(f"User '{username}' not found.", 'danger')
+        return jsonify(result=f"User '{username}' not found"), 404
 
+    # if user is current user, return error
+    if current_user != user:
+        current_user.unfollow(user)
+        db.session.commit()
+        flash(f"You are no longer following {username}", 'danger')
+        return redirect(url_for('get_user', username=user.username))
+    else:
+        flash("You cannot unfollow yourself.", 'warning')
+        return jsonify(result="Cannot unfollow yourself"), 400
 
 @app.route("/post/<int:post_id>/like", methods=['GET', 'POST'])
 @login_required
