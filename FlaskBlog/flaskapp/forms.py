@@ -36,7 +36,24 @@ class RegistrationForm(FlaskForm):
             raise ValidationError("Email is already taken.")
 
 
-class LoginForm(FlaskForm):
+# class LoginForm(FlaskForm):
+#     username = StringField(label='Username', validators=[
+#         DataRequired(),
+#         Length(min=2, max=20)
+#     ])
+#     password = PasswordField(label='Password', validators=[
+#         DataRequired(),
+#         Length(min=6)
+#     ])
+#     remember = BooleanField(label='Remember me')
+#     submit = SubmitField(label='Login')
+
+#     def validate_username(self, username):
+#         user = User.query.filter_by(username=username.data).first()
+#         if not user:
+#             raise ValidationError("Username does not exist. Please register first.")
+
+class UsernameLoginForm(FlaskForm):
     username = StringField(label='Username', validators=[
         DataRequired(),
         Length(min=2, max=20)
@@ -48,10 +65,19 @@ class LoginForm(FlaskForm):
     remember = BooleanField(label='Remember me')
     submit = SubmitField(label='Login')
 
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if not user:
-            raise ValidationError("Username does not exist. Please register first.")
+
+class EmailLoginForm(FlaskForm):
+    email = StringField('Email', validators=[
+        DataRequired(),
+        Email()
+    ])
+    password = PasswordField(label='Password', validators=[
+        DataRequired(),
+        Length(min=6)
+    ])
+    remember = BooleanField(label='Remember me')
+    submit = SubmitField(label='Login')
+
 
 
 class PostForm(FlaskForm):

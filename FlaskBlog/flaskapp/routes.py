@@ -1,6 +1,6 @@
 from flaskapp import app, db, bcrypt
 from flask import render_template, redirect, url_for, flash, request, jsonify
-from flaskapp.forms import RegistrationForm, LoginForm, PostForm, AccountUpdateForm, CommentPostForm
+from flaskapp.forms import RegistrationForm, PostForm, AccountUpdateForm, CommentPostForm, UsernameLoginForm, EmailLoginForm
 from flaskapp.models import User, Post, Comment, Notif
 from flask_login import login_user, current_user, logout_user, login_required
 from flaskapp.helpers import save_picture, save_media, get_file_url, delete_file
@@ -78,17 +78,34 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash("Account registerd sucessfully. You can now login", 'success')
-        return redirect(url_for('login'))
+        return redirect(url_for('login_username'))
     return render_template("register.html", title="Register", form=form)
 
 
+# original login using username
+# @app.route("/login", methods=['GET', 'POST'])
+# def login():
+#     if current_user.is_authenticated:
+#         return redirect(url_for('home'))
+#     form = LoginForm()
+#     print(form.errors)  # print form errors
+#     if form.validate_on_submit():
+#         user = User.query.filter_by(username=form.username.data).first()
+#         if user and bcrypt.check_password_hash(user.password, form.password.data):
+#             login_user(user, remember=form.remember.data)
+#             flash("You have been logged in successfully", 'success')
+#             next_page = request.args.get('next')
+#             return redirect(next_page) if next_page else redirect(url_for('home'))
+#         else:
+#             flash("username or password is incorrect", 'danger')
+#             return redirect(url_for('login'))
+#     return render_template('login.html', title='Login', form=form)
 
-@app.route("/login", methods=['GET', 'POST'])
-def login():
+@app.route("/login/username", methods=['GET', 'POST'])
+def login_username():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
-    form = LoginForm()
-    print(form.errors)  # print form errors
+    form = UsernameLoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
@@ -97,9 +114,25 @@ def login():
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
-            flash("username or password is incorrect", 'danger')
-            return redirect(url_for('login'))
-    return render_template('login.html', title='Login', form=form)
+            flash("Username or password is incorrect", 'danger')
+    return render_template('login.html', title='Sign In with Username', form=form, toggle_mode="email")
+
+@app.route("/login/email", methods=['GET', 'POST'])
+def login_email():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = EmailLoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
+            flash("You have been logged in successfully", 'success')
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('home'))
+        else:
+            flash("Email or password is incorrect", 'danger')
+    return render_template('login.html', title='Sign In with Email', form=form, toggle_mode="username")
+
 
 
 
