@@ -100,6 +100,13 @@ class AccountUpdateForm(FlaskForm):
         DataRequired(),
         Length(min=2, max=20)
     ])
+    email = StringField(label='Change Email', validators=[
+        DataRequired(),
+        Email()
+    ])
+    # background_picture = FileField(label='Upload new background pic', validators=[
+    #     FileAllowed(('jpg', 'png'))
+    # ])
     picture = FileField(label='Upload new profile pic', validators=[
         FileAllowed(('jpg', 'png'))
     ])

@@ -63,6 +63,7 @@
                       <i class="fa fa-bell-o"></i>
                     </a>
                     <div class="dropdown-menu notif" aria-labelledby="navbarDropdown">
+                      <span class="dropdown-header">Notifications</span>
                       {% if current_user.new_notif() %}
                         {% for notif in current_user.get_notifs() %}
                           <a class="dropdown-item bg-light" href="{{url_for('get_post', post_id=notif.post_id)}}">
@@ -112,9 +113,9 @@
                     {% endif%}
                 {% endwith %}
                 {% block content %} {% endblock content %}
-              </div>
-              {% block sidebar %} {% endblock sidebar %}
-          </div>
+            </div>
+            {% block sidebar %} {% endblock sidebar %}
+        </div>
     </main>
 </body>
 

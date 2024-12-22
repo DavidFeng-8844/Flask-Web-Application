@@ -82,25 +82,6 @@ def register():
     return render_template("register.html", title="Register", form=form)
 
 
-# original login using username
-# @app.route("/login", methods=['GET', 'POST'])
-# def login():
-#     if current_user.is_authenticated:
-#         return redirect(url_for('home'))
-#     form = LoginForm()
-#     print(form.errors)  # print form errors
-#     if form.validate_on_submit():
-#         user = User.query.filter_by(username=form.username.data).first()
-#         if user and bcrypt.check_password_hash(user.password, form.password.data):
-#             login_user(user, remember=form.remember.data)
-#             flash("You have been logged in successfully", 'success')
-#             next_page = request.args.get('next')
-#             return redirect(next_page) if next_page else redirect(url_for('home'))
-#         else:
-#             flash("username or password is incorrect", 'danger')
-#             return redirect(url_for('login'))
-#     return render_template('login.html', title='Login', form=form)
-
 @app.route("/login/username", methods=['GET', 'POST'])
 def login_username():
     if current_user.is_authenticated:
@@ -205,6 +186,7 @@ def account():
     if form.validate_on_submit():
         if form.picture.data:
             current_user.image_file = save_picture(form.picture.data, 'pfp')
+        current_user.email = form.email.data
         current_user.username = form.username.data
         db.session.commit()
         flash("Account updated", 'success')
@@ -216,24 +198,6 @@ def account():
     return render_template("account.html", title='Account',
                             form = form, image_url=current_user.image_file, get_file_url=get_file_url)
 
-
-
-# @app.route("/follow", methods=['GET', 'POST'])
-# @login_required
-# def follow_user():
-#     # user_id = int(request.args.get('id'))
-#     if request.method == 'GET':
-#         username = request.args.get('username')
-#     else:
-#         username = request.form['username']
-#     print(username)
-#     user = User.query.filter_by(username=username).first()
-#     current_user.follow(user)
-#     db.session.commit()
-#     flash(f"You are now following {username}", 'success')
-
-#     return jsonify(result=username + " followed")
-#     # return redirect(url_for('get_user', username=user.username))
 
 @app.route("/follow", methods=['GET', 'POST'])
 @login_required
@@ -265,22 +229,6 @@ def follow_user():
         return jsonify(result="Cannot follow yourself"), 400
 
 
-
-
-# @app.route("/unfollow", methods=['POST'])
-# @login_required
-# def unfollow_user(username):
-#     # user_id = int(request.args.get('id'))
-#     username = request.form['username']
-#     user = User.query.filter_by(username=username).first()
-#     current_user.unfollow(user)
-#     db.session.commit()
-#     print(username)
-#     # flash(f"{username} unfollowed", 'success')
-
-#     return jsonify(result=username + " unfollowed")
-#     # return redirect(url_for('get_user', username=user.username))
-
 @app.route("/unfollow", methods=['GET', 'POST'])
 @login_required
 def unfollow_user():
@@ -310,6 +258,7 @@ def unfollow_user():
         flash("You cannot unfollow yourself.", 'warning')
         return jsonify(result="Cannot unfollow yourself"), 400
 
+
 @app.route("/post/<int:post_id>/like", methods=['GET', 'POST'])
 @login_required
 def post_likes(post_id):
@@ -324,7 +273,6 @@ def post_likes(post_id):
 
     db.session.commit()
     return jsonify(result=post.get_likes_count())
-
 
 
 @app.route("/comment/<int:post_id>", methods=['POST'])
@@ -346,7 +294,6 @@ def make_comment(post_id):
         return jsonify(username=current_user.username,
                     user_url=url_for('get_user', username=current_user.username),
                     content=content, cid=c.cid, date_posted=c.date_posted.strftime('%d-%m-%Y'))
-
 
 
 @app.route("/comment/<int:com_id>/delete")

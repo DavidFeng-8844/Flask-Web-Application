@@ -7,7 +7,7 @@
                 <legend>Update Account Info</legend>
                 <div class="float-left col-md-1">
                     <img  class="rounded" src="{{ get_file_url('profile_pics/' + current_user.image_file) }}">
-                </div>
+                </div>  
                 <div class="float-right">
                     <div class="form-group" >
                         {{ form.username.label() }}
@@ -15,6 +15,18 @@
                         <div>
                             {% if form.username.errors %}
                                 {% for error in form.username.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- update email -->
+                    <div class="form-group">
+                        {{ form.email.label() }}
+                        {{ form.email(class="form-control", placeholder="Email") }}
+                        <div>
+                            {% if form.email.errors %}
+                                {% for error in form.email.errors %}
                                     <span>{{ error }}</span>
                                 {% endfor %}
                             {% endif %}
@@ -35,7 +47,7 @@
                         {{ form.submit(class="btn btn-primary") }}
                     </div>
                 </div>
-            </fieldset
+            </fieldset>
         </form>
     </div>
 {% endblock %}
