@@ -1,0 +1,27 @@
+@media (min-width: 768px) {
+    .h-md-100 {
+        top: 0px;
+        height: 100vh;
+        background: url;
+    }
+}
+
+.left-landing {
+    background: url("/static/cover/cover.jpg") no-repeat center center;
+    backdrop-filter: blur(6px);
+    /* resize the background image smaller*/
+    background-size: 75%;
+}
+
+.bottom-align-text {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+/* set the style for h1 */
+h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: black;
+}

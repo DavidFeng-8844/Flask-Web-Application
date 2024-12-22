@@ -226,30 +226,3 @@ textarea.caption-box { overflow: hidden; }
     font-size: 17px;
     margin-right: 0.8rem;
 }
-
-/* Ensure the sidebar stays sticky on larger screens */
-.sidebar {
-    margin-top: 70px;
-    position: relative;
-}
-
-/* Make the sidebar sticky on larger screens */
-@media (min-width: 768px) {
-    .sidebar {
-        position: sticky;
-        top: 20px; /* Add some space from the top */
-    }
-}
-
-/* Move sidebar to the top on small screens */
-@media (max-width: 768px) {
-    .sidebar {
-        position: static;
-        margin-top: 10px;
-    }
-}
-
-/* Reset special margin for small screens */
-.special {
-    margin-right: 0;
-}
