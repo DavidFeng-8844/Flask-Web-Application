@@ -194,6 +194,7 @@ def account():
     # pre populate form
     if request.method == 'GET':
         form.username.data = current_user.username
+        form.email.data = current_user.email
 
     return render_template("account.html", title='Account',
                             form = form, image_url=current_user.image_file, get_file_url=get_file_url)
