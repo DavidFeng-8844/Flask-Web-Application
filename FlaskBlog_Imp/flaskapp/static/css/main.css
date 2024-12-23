@@ -236,4 +236,10 @@ textarea.caption-box { overflow: hidden; }
     }
 }
 
+/* Hide sidebar on small screens */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none; /* Hide the sidebar */
+    }
+}
 

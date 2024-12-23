@@ -4,6 +4,11 @@
         .special {
             margin-right: 25%;
         }
+        .no-posts-message {
+            font-size: 1.2rem;
+            color: gray;
+            margin-top: 20px;
+        }
     </style>
     <script>
         let page_count = 1;
@@ -37,7 +42,7 @@
                         if (page_count === 2) { // First load check
                             const noPostsMessage = document.createElement('div');
                             noPostsMessage.className = "no-posts-message text-center";
-                            noPostsMessage.innerText = "No posts available. Please check back later!";
+                            noPostsMessage.innerText = "No posts available. Your own post and the followed users' post would be shown here!";
                             document.querySelector('.special').append(noPostsMessage);
                         }       
                         end_reached = true;
