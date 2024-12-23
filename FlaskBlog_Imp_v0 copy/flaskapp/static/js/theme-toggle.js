@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   
   function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'dark' : 'light';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
   }
   
@@ -23,4 +23,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
       themeIcon.classList.add('fa-sun');
     }
   }
+
+
   

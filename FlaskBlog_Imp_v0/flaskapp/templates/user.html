@@ -1,0 +1,176 @@
+{% extends "layout.html" %}
+{% block content %}
+<script>
+    $(document).ready(function() {
+        // When the followers modal is opened
+        $('#followersModal').on('show.bs.modal', function (event) {
+            var username = '{{ user.username }}';
+            $.get('/user/' + username + '/followers', function(data) {
+                var followersList = $('#followersList');
+                followersList.empty();  // Clear previous list
+                data.followers.forEach(function(follower) {
+                    followersList.append(`
+                        <li class="list-group-item">
+                            <a href="${follower.profile_url}">
+                                <img src="${follower.image_url}" alt="${follower.username}" class="rounded-circle" width="30" height="30">
+                                ${follower.username}
+                            </a>
+                            <button class="btn btn-sm ${follower.is_following ? 'btn-secondary' : 'btn-primary'}" 
+                                    data-username="${follower.username}">
+                                ${follower.is_following ? 'Unfollow' : 'Follow'}
+                            </button>
+                        </li>
+                    `);
+                });
+
+                // Handle follow/unfollow button click
+                followersList.find('button').on('click', function() {
+                    var button = $(this);
+                    var username = button.data('username');
+                    var action = button.text().toLowerCase();
+
+                    $.ajax({
+                        url: action === 'follow' ? '/follow' : '/unfollow',
+                        method: 'POST',
+                        data: { username: username },
+                        success: function() {
+                            button.toggleClass('btn-primary btn-secondary');
+                            button.text(action === 'follow' ? 'Unfollow' : 'Follow');
+                        }
+                    });
+                });
+            });
+        });
+
+        // When the following modal is opened
+        $('#followingModal').on('show.bs.modal', function (event) {
+            var username = '{{ user.username }}';
+            $.get('/user/' + username + '/following', function(data) {
+                var followingList = $('#followingList');
+                followingList.empty();  // Clear previous list
+                data.following.forEach(function(followedUser) {
+                    followingList.append(`
+                        <li class="list-group-item">
+                            <a href="${followedUser.profile_url}">
+                                <img src="${followedUser.image_url}" alt="${followedUser.username}" class="rounded-circle" width="30" height="30">
+                                ${followedUser.username}
+                            </a>
+                            <button class="btn btn-sm ${followedUser.is_following ? 'btn-secondary' : 'btn-primary'}" 
+                                    data-username="${followedUser.username}">
+                                ${followedUser.is_following ? 'Unfollow' : 'Follow'}
+                            </button>
+                        </li>
+                    `);
+                });
+
+                // Handle follow/unfollow button click
+                followingList.find('button').on('click', function() {
+                    var button = $(this);
+                    var username = button.data('username');
+                    var action = button.text().toLowerCase();
+
+                    $.ajax({
+                        url: action === 'follow' ? '/follow' : '/unfollow',
+                        method: 'POST',
+                        data: { username: username },
+                        success: function() {
+                            button.toggleClass('btn-primary btn-secondary');
+                            button.text(action === 'follow' ? 'Unfollow' : 'Follow');
+                        }
+                    });
+                });
+            });
+        });
+    });
+</script>
+
+<div class="col-md-12">
+    <div class="row user info">
+        <div class="col-md-3 align-items-center">
+            <img class="pfp-img rounded-circle" src="{{ get_file_url('profile_pics/' + user.image_file) }}">
+        </div>
+        <div class="row">
+            <div class="m-4">
+                <h2 id="user">{{ user.username }}</h2>
+
+                <ul class="list-group list-group-horizontal bg-light">
+                    <li class="user-info list-group-item border-0 bg-light">
+                        {{ user.posts.__len__() }} <span class="text-dark font-weight-normal" href="#posts">Posts</span>
+                    </li>
+                    <li class="user-info list-group-item border-0 bg-light">
+                        <a href="#" data-toggle="modal" data-target="#followersModal">{{ user.get_followers_count(user) }} <span class="text-dark font-weight-normal">Followers</span></a>
+                    </li>
+                    <li class="user-info list-group-item border-0 bg-light">
+                        <a href="#" data-toggle="modal" data-target="#followingModal">{{ user.follows.count() }} <span class="text-dark font-weight-normal">Following</span></a>
+                    </li>
+                </ul>
+            </div>
+
+            {% if current_user.is_authenticated %}
+            <div class="">
+                <small class="">
+                    {% if current_user.is_following(user) %}
+                    <a href="{{ url_for('unfollow_user', username=user.username) }}" class="btn btn-secondary" id="flw">Following</a>
+                    {% elif user != current_user %}
+                    <a href="{{ url_for('follow_user', username=user.username) }}" class="btn btn-primary" id="flw">Follow</a>
+                    {% endif %}
+                </small>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<div class="row row-cols-3 mb-4" id="posts">
+    {% for post in posts %}
+    <div class="col p-2 img-wrapper rounded">
+        {% if post.media %}
+        <a href="{{ url_for('get_post', post_id=post.pid) }}">
+            <img class="post-img" src="{{ get_file_url('media/mid' + post.media) }}">
+        </a>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modal for Followers -->
+<div class="modal fade" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="followersModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="followersModalLabel">Followers</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="followersList" class="list-group">
+                    <!-- Followers will be dynamically loaded here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Following -->
+<div class="modal fade" id="followingModal" tabindex="-1" role="dialog" aria-labelledby="followingModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="followingModalLabel">Following</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="followingList" class="list-group">
+                    <!-- Following will be dynamically loaded here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

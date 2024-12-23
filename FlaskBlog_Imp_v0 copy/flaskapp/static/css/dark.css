@@ -1,0 +1,262 @@
+/* Dark Theme */
+
+/* General body styling */
+[data-theme="dark"] body {
+    background: #1e1e1e;
+    color: #dcdcdc;
+  }
+  
+  [data-theme="dark"] .main-content {
+    margin-top: 6rem;
+  }
+  
+  /* navy blue */
+  [data-theme="dark"] .navbar {
+    background-color: #072059;
+  }
+  /* background color for the whole html */
+  [data-theme="dark"] .special {
+    background-color: #1e1e1e;
+  }
+  
+  [data-theme="dark"] .navbar .nav-link {
+    color: #a3b1c2;
+  }
+  
+  [data-theme="dark"] .navbar .nav-link:hover {
+    color: #f0f0f0;
+  }
+  
+  [data-theme="dark"] .navbar .nav-link.active {
+    font-weight: 500;
+  }
+  
+  [data-theme="dark"] .article {
+    width: 100%;
+    margin-bottom: 5rem;
+  }
+  
+  [data-theme="dark"] .post-media {
+    /* padding-left: 20px;
+    padding-right: 20px; */
+  }
+  
+  [data-theme="dark"] .card-header {
+    background-color: #2c2f38;
+  }
+  
+  [data-theme="dark"] .post-meta-data {
+    margin-top: -15px;
+    margin-bottom: 5px;
+  }
+  
+  [data-theme="dark"] .liked {
+    color: #ec4a64;
+  }
+  
+  [data-theme="dark"] .like-counter {
+    margin-top: 2px;
+    font-weight: bold;
+    font-size: 15px;
+  }
+  
+  [data-theme="dark"] .comment {
+    display: block;
+    word-wrap: break;
+    font-size: 14px;
+  }
+  
+  [data-theme="dark"] a.user-link {
+    color: #dcdcdc;
+    font-weight: bold;
+  }
+  
+  [data-theme="dark"] .account-img {
+    height: 30px;
+    width: 30px;
+    margin-right: 5px;
+  }
+  
+  [data-theme="dark"] .side-account-img {
+    height: 50px;
+    width: 50px;
+    margin-right: 5px;
+  }
+  
+  [data-theme="dark"] .make-comment {
+    font-size: 15px;
+  }
+  
+  [data-theme="dark"] .pfp-img {
+    height: 125px;
+    width: 125px;
+  }
+  
+  [data-theme="dark"] .up-info {
+    font-size: 23px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  [data-theme="dark"] .login-form {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+  
+  [data-theme="dark"] .comments {
+    justify-content: space-between;
+  }
+  
+  [data-theme="dark"] .delete-comment {
+    display: none;
+  }
+  
+  [data-theme="dark"] span.comment:hover small.delete-comment {
+    display: block;
+  }
+  
+  [data-theme="dark"] .notif {
+    max-height: 9rem;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
+  
+  [data-theme="dark"] .home-comment-box {
+    justify-content: space-between;
+    padding: 0rem 0.5rem 0 0.5rem;
+  }
+  
+  [data-theme="dark"] .comment-box {
+    max-width: inherit;
+    word-wrap: break-word;
+    resize: none;
+    border: none;
+    margin-top: 0.5rem;
+    background-color: #333;
+    color: #dcdcdc;
+  }
+  
+  [data-theme="dark"] textarea.comment-box {
+    overflow: hidden;
+  }
+  
+  [data-theme="dark"] #upload {
+    opacity: 0;
+  }
+  
+  [data-theme="dark"] #upload-label {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+  }
+  
+  [data-theme="dark"] .modal-dialog {
+    width: 40rem;
+    margin: auto;
+  }
+  
+  [data-theme="dark"] .modal-body {
+    padding: 0;
+  }
+  
+  [data-theme="dark"] .modal-header {
+    border-bottom: none;
+  }
+  
+  [data-theme="dark"] .post-caption-box {
+    justify-content: space-between;
+    padding: 0.5rem;
+  }
+  
+  [data-theme="dark"] .caption-box {
+    max-width: inherit;
+    word-wrap: break-word;
+    resize: none;
+    border: none;
+  }
+  
+  [data-theme="dark"] textarea.caption-box {
+    overflow: hidden;
+  }
+  
+  [data-theme="dark"] #flw {
+    margin-top: 1.9rem;
+  }
+  
+  [data-theme="dark"] .user-info {
+    padding: 0.2rem 1rem 2rem 0rem;
+    font-weight: bold;
+    font-size: 16px;
+    color: #dcdcdc;
+  }
+  
+  [data-theme="dark"] .img-wrapper {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
+  }
+  
+  [data-theme="dark"] .post-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  [data-theme="dark"] #imageResult {
+    max-height: 27rem;
+  }
+  
+  [data-theme="dark"] .main-img-wrapper {
+    max-height: 35rem;
+    max-width: inherit;
+    overflow: hidden;
+  }
+  
+  [data-theme="dark"] .suggs {
+    border: none;
+    background: inherit;
+  }
+  
+  [data-theme="dark"] .card-img-top {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  [data-theme="dark"] .card-body {
+    background-color: #2c2f38;
+  }
+  
+  [data-theme="dark"] .modal-footer {
+      background-color: #2c2f38;
+  }
+  
+  [data-theme="dark"] .nav-icons {
+    font-size: 17px;
+    margin-right: 0.8rem;
+  }
+  
+  [data-theme="dark"] .sticky {
+    position: sticky;
+    top: 0;
+  }
+  
+  [data-theme="dark"] .navbar-nav .nav-link {
+    color: #a3b1c2;
+  }
+  
+  [data-theme="dark"] .navbar-nav .nav-link:hover {
+    color: #f0f0f0;
+  }
+  
+  [data-theme="dark"] .navbar-nav .nav-link.active {
+    font-weight: 500;
+  }
+  
+  [data-theme="dark"] .navbar-brand {
+    color: #dcdcdc;
+  }
+  

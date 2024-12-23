@@ -1,0 +1,146 @@
+{% extends "layout.html" %}
+{% block content %}
+    <style>
+        .special {
+            margin-right: 25%;
+        }
+        .no-posts-message {
+            font-size: 1.2rem;
+            color: gray;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        let page_count = 1;
+        let end_reached = false;
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            load_posts(page_count++);
+
+            window.onscroll = () => {
+                // check if we reached the bottom
+                if(window.innerHeight + window.scrollY >= document.body.offsetHeight && end_reached == false) {
+                    load_posts(page_count++);
+                }
+            }; 
+        });
+
+        function load_posts(start) {
+            const req = new XMLHttpRequest();
+            req.open('POST', $SCRIPT_ROOT + '/')
+
+            req.onload = () => {
+                const data = JSON.parse(req.responseText);
+                
+                if (data.success) {
+                    if(data.result.length === 0) {
+                        if (page_count === 2) { // First load check
+                            const noPostsMessage = document.createElement('div');
+                            noPostsMessage.className = "no-posts-message text-center";
+                            noPostsMessage.innerText = "No posts available. Your own post and the followed users' post would be shown here!";
+                            document.querySelector('.special').append(noPostsMessage);
+                        }       
+                        end_reached = true;
+                        return false;
+                    }
+
+                    data.result.forEach(post => {
+                        const content = template(post);
+                        $('.special').append(content);
+
+                        document.querySelector(`#sh-${post.pid}`).onclick = link_share;
+                        document.querySelector(`#l-${post.pid}`).onclick = like_post;
+                        document.querySelector(`#c-${post.pid}`).onclick = comment_handler;
+                        document.querySelector(`#c-${post.pid}`).disabled = true;
+                        document.querySelector(`#comment-on-${post.pid}`).onkeyup = enable_disable_button;
+                    });
+
+                } else {
+                    alert("Something went wrong", data.result);
+                }
+            };
+
+            const param = new FormData();
+            param.append('start', start);
+
+            req.send(param);
+        };
+    
+    </script>
+
+{% endblock content %}
+{% block sidebar %}
+<div class="col-md-3 sidebar" style="position: fixed; float: right; right: 11%;">
+    <div class="content-section">
+        <h4 class="pb-2">
+            <img class="side-account-img rounded-circle" src="{{ get_file_url('profile_pics/' + current_user.image_file) }}"> 
+            <a class="text-dark" href="{{ url_for('get_user', username=current_user.username) }}">{{ current_user.username }}</a>
+        </h4>
+
+        <small class='text-muted text-uppercase'>Suggestions for you to follow</small>
+
+        <ul class="list-group suggs">
+            {% for user in current_user.get_user_suggestion() %}
+                <li class="list-group-item">
+                    <img class="account-img rounded-circle" src="{{ get_file_url('profile_pics/' + user.image_file) }}"> 
+                    <a id="flw-{{user.uid}}" class="text-dark user-link" href="{{ url_for('get_user', username=user.username) }}">
+                        {{ user.username }}
+                    </a>
+                    {% if current_user.is_following(user) %}
+                        <a href="{{ url_for('unfollow_user', username=user.username) }}" class="mt-1 float-right flw-sug text-secondary" id="s-{{user.uid}}">Following</a>
+                    {% elif user != current_user %}
+                        <a href="{{ url_for('follow_user', username=user.username) }}" class="mt-1 float-right flw-sug text-primary" id="s-{{user.uid}}">Follow</a>
+                    {% endif %}
+                </li>
+            {% else %}
+                <small class="text-muted">You've followed everyone! Enjoy.</small>
+            {% endfor %}
+        </ul>
+
+        <!-- Add Follow/Following Buttons -->
+        <!-- <div class="mt-3">
+            <button class="btn btn-outline-primary" data-toggle="modal" data-target="#followersModal">Followers</button>
+            <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#followingModal">Following</button>
+        </div> -->
+    </div>
+</div>
+
+<!-- Modal for Followers -->
+<div class="modal fade" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="followersModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="followersModalLabel">Followers</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="followersList" class="list-group">
+                    <!-- Followers will be dynamically loaded here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Following -->
+<div class="modal fade" id="followingModal" tabindex="-1" role="dialog" aria-labelledby="followingModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="followingModalLabel">Following</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="followingList" class="list-group">
+                    <!-- Following will be dynamically loaded here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock sidebar %}
