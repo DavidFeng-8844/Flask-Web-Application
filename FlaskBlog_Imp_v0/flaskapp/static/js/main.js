@@ -45,7 +45,7 @@ function comment_handler() {
     });
 }
 
-// enable or diable post button
+// enable or disable post button
 function enable_disable_button() {
     const com_id = this.id.split('-')[2];
     let com = this.value;
