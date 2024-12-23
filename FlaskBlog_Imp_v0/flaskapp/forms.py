@@ -27,6 +27,8 @@ class RegistrationForm(FlaskForm):
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
+        if ' ' in username.data:
+            raise ValidationError("Username cannot contain spaces.")
         if user:
             raise ValidationError("Username is already taken.")
 
@@ -116,5 +118,13 @@ class AccountUpdateForm(FlaskForm):
     def validate_username(self, username):
         if username.data != current_user.username:
             user = User.query.filter_by(username=username.data).first()
+            if ' ' in username.data:
+                raise ValidationError("Username cannot contain spaces.")
             if user:
                 raise ValidationError("Username is already take.")
+            
+    def validate_email(self, email):
+        if email.data != current_user.email:
+            user = User.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError("Email is already taken.")
