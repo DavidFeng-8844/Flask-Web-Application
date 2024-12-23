@@ -34,6 +34,12 @@
                 
                 if (data.success) {
                     if(data.result.length === 0) {
+                        if (page_count === 2) { // First load check
+                            const noPostsMessage = document.createElement('div');
+                            noPostsMessage.className = "no-posts-message text-center";
+                            noPostsMessage.innerText = "No posts available. Please check back later!";
+                            document.querySelector('.special').append(noPostsMessage);
+                        }       
                         end_reached = true;
                         return false;
                     }
