@@ -68,17 +68,21 @@
               <!-- Navbar Right Side -->
               <div class="navbar-nav">
                 {% if current_user.is_authenticated %}
-                  <a class="nav-item nav-link nav-icons" title="Home" href="{{ url_for('home') }}">
+                  <!-- link to current user -->
+                  <a class="nav-item nav-link nav-icons" title="Your Profile" href="{{ url_for('get_user', username=current_user.username) }}">
+                    <i class="fa fa-user-circle" aria-hidden="true"></i> User
+                  </a>
+                  <a class="nav-item nav-link nav-icons" title="Home page to see all your and your follower's posts" href="{{ url_for('home') }}">
                     <i class="fa fa-home" aria-hidden="true"></i> Home
                   </a>
-                  <a class="nav-item nav-link nav-icons" title="Explore" href="{{ url_for('explore') }}">
+                  <a class="nav-item nav-link nav-icons" title="Explore all posts" href="{{ url_for('explore') }}">
                     <i class="fa fa-compass" aria-hidden="true"></i>Explore
                   </a>
                   <a class="nav-item nav-link nav-icons" title="New Post" href="{{ url_for('new_post') }}">
                     <i class="far fa-edit"></i> New Post
                   </a>
-                  <a class="nav-item nav-link nav-icons" title="Account" href="{{ url_for('account') }}">
-                    <i class="far fa-user-circle"></i> Account
+                  <a class="nav-item nav-link nav-icons" title="Edit your account" href="{{ url_for('account') }}">
+                    <i class="far fa-sun"></i> Account Setting
                   </a>
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle nav-icons" href="#"  title="Notifications" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

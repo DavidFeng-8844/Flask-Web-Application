@@ -122,7 +122,8 @@ class AccountUpdateForm(FlaskForm):
                 raise ValidationError("Username cannot contain spaces.")
             if user:
                 raise ValidationError("Username is already take.")
-            
+
+
     def validate_email(self, email):
         if email.data != current_user.email:
             user = User.query.filter_by(email=email.data).first()
