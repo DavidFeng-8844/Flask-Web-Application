@@ -1,15 +1,27 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms.fields import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
-from wtforms.validators import DataRequired, Length, EqualTo, ValidationError, Email
+from wtforms.fields import (
+    StringField,
+    PasswordField,
+    SubmitField,
+    BooleanField,
+    TextAreaField
+)
+
+from wtforms.validators import (
+    DataRequired,
+    Length,
+    EqualTo,
+    ValidationError,
+    Email
+)
 from flaskapp.models import User
 from flask_login import current_user
 
 
-
 class RegistrationForm(FlaskForm):
     email = StringField('Email',
-                    validators=[DataRequired(), Email()])
+                        validators=[DataRequired(), Email()])
     username = StringField(label='Username', validators=[
         DataRequired(),
         Length(min=2, max=20)
@@ -24,7 +36,6 @@ class RegistrationForm(FlaskForm):
     ])
     submit = SubmitField(label='Register')
 
-
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if ' ' in username.data:
@@ -37,23 +48,6 @@ class RegistrationForm(FlaskForm):
         if user:
             raise ValidationError("Email is already taken.")
 
-
-# class LoginForm(FlaskForm):
-#     username = StringField(label='Username', validators=[
-#         DataRequired(),
-#         Length(min=2, max=20)
-#     ])
-#     password = PasswordField(label='Password', validators=[
-#         DataRequired(),
-#         Length(min=6)
-#     ])
-#     remember = BooleanField(label='Remember me')
-#     submit = SubmitField(label='Login')
-
-#     def validate_username(self, username):
-#         user = User.query.filter_by(username=username.data).first()
-#         if not user:
-#             raise ValidationError("Username does not exist. Please register first.")
 
 class UsernameLoginForm(FlaskForm):
     username = StringField(label='Username', validators=[
@@ -81,7 +75,6 @@ class EmailLoginForm(FlaskForm):
     submit = SubmitField(label='Login')
 
 
-
 class PostForm(FlaskForm):
     content = TextAreaField(label='Content')
     media = FileField(label='Upload pic', validators=[
@@ -90,11 +83,9 @@ class PostForm(FlaskForm):
     submit = SubmitField(label='Post')
 
 
-
 class CommentPostForm(FlaskForm):
     content = TextAreaField(label='Comment')
     submit = SubmitField(label='Post')
-
 
 
 class AccountUpdateForm(FlaskForm):
@@ -106,14 +97,10 @@ class AccountUpdateForm(FlaskForm):
         DataRequired(),
         Email()
     ])
-    # background_picture = FileField(label='Upload new background pic', validators=[
-    #     FileAllowed(('jpg', 'png'))
-    # ])
     picture = FileField(label='Upload new profile pic', validators=[
         FileAllowed(('jpg', 'png'))
     ])
     submit = SubmitField(label='Update')
-
 
     def validate_username(self, username):
         if username.data != current_user.username:
@@ -122,7 +109,6 @@ class AccountUpdateForm(FlaskForm):
                 raise ValidationError("Username cannot contain spaces.")
             if user:
                 raise ValidationError("Username is already take.")
-
 
     def validate_email(self, email):
         if email.data != current_user.email:

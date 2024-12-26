@@ -24,11 +24,35 @@
     {% else %}
     <title>FlaskApp</title>
     {% endif %}
-    <!-- <link rel="icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}"> -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/cookieconsent.min.css') }}" /> -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
 </head>
 
 <body>
-
+    <!-- <script src="{{ url_for('static', filename='js/cookieconsent.min.js') }}"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script>
+        window.addEventListener("load", function(){
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#000"
+                    },
+                    "button": {
+                        "background": "#f1d600"
+                    }
+                },
+                "theme": "classic",
+                "content": {
+                    "message": "This website uses cookies to ensure you get the best experience on our website.",
+                    "dismiss": "Got it!",
+                    "link": "Learn more",
+                    "href": "/privacy-policy"
+                }
+            })
+        });
+    </script>
     <header class="site-header">
         <nav class="navbar navbar-expand-md navbar-light border-bottom fixed-top">
             <div class="container">

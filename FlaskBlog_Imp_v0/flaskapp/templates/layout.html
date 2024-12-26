@@ -14,6 +14,8 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dark.css') }}">
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/cookieconsent.min.css') }}" /> -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
 
     <!-- Local JS -->
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
@@ -55,6 +57,29 @@
   </script> -->
 </head>
 <body>
+    <!-- <script src="{{ url_for('static', filename='js/cookieconsent.min.js') }}"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script>
+        window.addEventListener("load", function(){
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#000"
+                    },
+                    "button": {
+                        "background": "#f1d600"
+                    }
+                },
+                "theme": "classic",
+                "content": {
+                    "message": "This website uses cookies to ensure you get the best experience on our website.",
+                    "dismiss": "Got it!",
+                    "link": "Learn more",
+                    "href": "/privacy-policy"
+                }
+            })
+        });
+    </script>
     <header class="site-header">
         <nav class="navbar navbar-expand-md navbar-light border-bottom fixed-top">
           <div class="container">
@@ -78,7 +103,7 @@
                   <a class="nav-item nav-link nav-icons" title="Explore all posts" href="{{ url_for('explore') }}">
                     <i class="fa fa-compass" aria-hidden="true"></i>Explore
                   </a>
-                  <a class="nav-item nav-link nav-icons" title="New Post" href="{{ url_for('new_post') }}">
+                  <a class="nav-item nav-link nav-icons" href="{{ url_for('new_post') }}">
                     <i class="far fa-edit"></i> New Post
                   </a>
                   <a class="nav-item nav-link nav-icons" title="Edit your account" href="{{ url_for('account') }}">
@@ -94,7 +119,7 @@
                       {% if current_user.new_notif() %}
                         {% for notif in current_user.get_notifs() %}
                           <a class="dropdown-item bg-light" href="{{url_for('get_post', post_id=notif.post_id)}}">
-                            <img  class="account-img rounded" src="{{ url_for('static', filename='media/thumb' + notif.post.media) }}">
+                            <img  class="account-img rounded" src="{{ url_for('static', filename='media/thumb' + notif.post.media) }}" alt="Thumbnail image of post">
 
                             <small><span class="font-weight-bold">{{ notif.author }}</span> {{ notif.msg }} your post.</small>
                           </a>
@@ -102,7 +127,7 @@
                       {% endif %}
                       {% for notif in current_user.get_old_notifs() %}
                         <a class="dropdown-item" href="{{ url_for('get_post', post_id=notif.post_id) }}">
-                          <img  class="account-img rounded" src="{{ get_file_url('media/thumb' + notif.post.media) }}">
+                          <img  class="account-img rounded" src="{{ get_file_url('media/thumb' + notif.post.media) }}" alt="Thumbnail Image of Post">
 
                           <small><span class="font-weight-bold">{{ notif.author }}</span> {{ notif.msg }} your post.</small>
                         </a>
@@ -111,7 +136,7 @@
                       {% endfor %}
                     </div>
                   </li>
-                  <a class="nav-item nav-link nav-icons" title="Logout" href="{{ url_for('logout') }}">
+                  <a class="nav-item nav-link nav-icons" href="{{ url_for('logout') }}">
                     <i class="fa fa-sign-out"></i> Logout
                   </a>
                   <div class="navbar-nav">
@@ -129,6 +154,7 @@
         </nav>
     </header>
     <main role="main" class="container">
+      <h1 class="sr-only">Welcome to Flask Blog</h1>
         <div class="row justify-content-md-center main-content">
           {% block otherstuff %} {% endblock otherstuff %}
             <div class="col-md-7 special">

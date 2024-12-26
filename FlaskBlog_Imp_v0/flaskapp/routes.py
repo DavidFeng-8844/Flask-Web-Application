@@ -1,26 +1,25 @@
 from flaskapp import app, db, bcrypt
 from flask import render_template, redirect, url_for, flash, request, jsonify
-from flaskapp.forms import RegistrationForm, PostForm, AccountUpdateForm, CommentPostForm, UsernameLoginForm, EmailLoginForm
+from flaskapp.forms import RegistrationForm, PostForm, AccountUpdateForm, UsernameLoginForm, EmailLoginForm  # noqa E501
 from flaskapp.models import User, Post, Comment, Notif
 from flask_login import login_user, current_user, logout_user, login_required
-from flaskapp.helpers import save_picture, save_media, get_file_url, delete_file
+from flaskapp.helpers import save_picture, save_media, get_file_url, delete_file  # noqa E501
 
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    theme = request.cookies.get('theme', 'light')
+    # theme = request.cookies.get('theme', 'light')
     if request.method == 'GET':
         if not current_user.is_authenticated:
             return redirect(url_for('register'))
-        return render_template("home.html", title="FlaskBlog", get_file_url=get_file_url)
-
+        return render_template("home.html", title="FlaskBlog",
+                               get_file_url=get_file_url)
 
     if request.method == 'POST':
         start = int(request.form.get('start') or 1)
         # get posts
-        # posts = current_user.get_followed_posts().paginate(start, 2, False).items
         # The above method cannot render the post properly
-        posts = current_user.get_followed_posts().paginate(page=start, error_out=False).items
+        posts = current_user.get_followed_posts().paginate(page=start, error_out=False).items  # noqa E501
 
         result = []
         for post in posts:
@@ -37,8 +36,8 @@ def home():
                         {
                             'uid': comment.author.uid,
                             'username': comment.author.username,
-                            'image_file': get_file_url('profile_pics/' + comment.author.image_file),
-                            'user_url': url_for('get_user', username=comment.author.username)
+                            'image_file': get_file_url('profile_pics/' + comment.author.image_file),  # noqa E501
+                            'user_url': url_for('get_user', username=comment.author.username)  # noqa E501
                         }
                     }
                 )
@@ -57,8 +56,10 @@ def home():
                     {
                         'uid': post.author.uid,
                         'username': post.author.username,
-                        'image_file': get_file_url('profile_pics/' + post.author.image_file),
-                        'user_url': url_for('get_user', username=post.author.username)
+                        'image_file': get_file_url('profile_pics/' +
+                                                   post.author.image_file),
+                        'user_url': url_for('get_user',
+                                            username=post.author.username)
                     },
                     'comment_count': post.comments_count(),
                     'comments': comments
@@ -74,8 +75,11 @@ def register():
         return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, password=hashed_password, email=form.email.data)
+        hashed_password = bcrypt.generate_password_hash(
+            form.password.data
+            ).decode('utf-8')
+        user = User(username=form.username.data,
+                    password=hashed_password, email=form.email.data)
         db.session.add(user)
         db.session.commit()
         flash("Account registerd sucessfully. You can now login", 'success')
@@ -89,15 +93,20 @@ def login_username():
         return redirect(url_for('home'))
     form = UsernameLoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
+        user = User.query.filter_by(
+            username=form.username.data
+            ).first()
+        if user and bcrypt.check_password_hash(user.password,
+                                               form.password.data):
             login_user(user, remember=form.remember.data)
             flash("You have been logged in successfully", 'success')
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('home'))
+            return redirect(next_page) if next_page else redirect(url_for('home'))  # noqa E501
         else:
             flash("Username or password is incorrect", 'danger')
-    return render_template('login.html', title='Sign In with Username', form=form, toggle_mode="email")
+    return render_template('login.html', title='Sign In with Username',
+                           form=form, toggle_mode="email")
+
 
 @app.route("/login/email", methods=['GET', 'POST'])
 def login_email():
@@ -106,16 +115,16 @@ def login_email():
     form = EmailLoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
+        if user and bcrypt.check_password_hash(user.password,
+                                               form.password.data):
             login_user(user, remember=form.remember.data)
             flash("You have been logged in successfully", 'success')
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('home'))
+            return redirect(next_page) if next_page else redirect(url_for('home'))  # noqa E501
         else:
             flash("Email or password is incorrect", 'danger')
-    return render_template('login.html', title='Sign In with Email', form=form, toggle_mode="username")
-
-
+    return render_template('login.html', title='Sign In with Email',
+                           form=form, toggle_mode="username")
 
 
 @app.route("/logout")
@@ -125,20 +134,20 @@ def logout():
     return redirect(url_for('login_username'))
 
 
-
 @app.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
         media = save_media(form.media.data, 'media')
-        post = Post(content=form.content.data, media=media, author=current_user)
+        post = Post(content=form.content.data,
+                    media=media, author=current_user)
         db.session.add(post)
         db.session.commit()
         flash("Posted successfully", 'success')
         return redirect(url_for('home'))
-    return render_template("new_post.html", title="FlaskBlog", form=form, get_file_url=get_file_url)
-
+    return render_template("new_post.html", title="FlaskBlog",
+                           form=form, get_file_url=get_file_url)
 
 
 @app.route("/user/<string:username>")
@@ -146,8 +155,8 @@ def get_user(username):
     user = User.query.filter_by(username=username).first_or_404()
     posts = user.posts
     posts.reverse()
-    return render_template("user.html", title=user.username, posts=posts, user=user, get_file_url=get_file_url)
-
+    return render_template("user.html", title=user.username,
+                           posts=posts, user=user, get_file_url=get_file_url)
 
 
 @app.route("/post/id/<int:post_id>")
@@ -156,8 +165,8 @@ def get_post(post_id):
     # post_id = request.args.get('post_id')
     post = Post.query.get_or_404(int(post_id))
 
-    return render_template("post.html", title="FlaskBlog", post=post, get_file_url=get_file_url, user=user)
-
+    return render_template("post.html", title="FlaskBlog",
+                           post=post, get_file_url=get_file_url, user=user)
 
 
 @app.route("/post/<int:post_id>/delete")
@@ -178,7 +187,6 @@ def delete_post(post_id):
         return redirect(url_for('home'))
 
 
-
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
@@ -197,15 +205,21 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
 
-    return render_template("account.html", title='Account',
-                            form = form, image_url=current_user.image_file, get_file_url=get_file_url)
+    return render_template("account.html",
+                           title='Account',
+                           form=form,
+                           image_url=current_user.image_file,
+                           get_file_url=get_file_url)
 
 
 @app.route("/follow", methods=['GET', 'POST'])
 @login_required
 def follow_user():
     # get username
-    username = request.args.get('username') if request.method == 'GET' else request.form.get('username')
+    if request.method == 'GET':
+        username = request.args.get('username')
+    else:
+        username = request.form.get('username')
 
     # if no username provided, return error
     if not username:
@@ -235,7 +249,10 @@ def follow_user():
 @login_required
 def unfollow_user():
     # get username
-    username = request.args.get('username') if request.method == 'GET' else request.form.get('username')
+    if request.method == 'GET':
+        username = request.args.get('username')
+    else:
+        username = request.form.get('username')
 
     # if no username provided, return error
     if not username:
@@ -294,8 +311,11 @@ def make_comment(post_id):
         db.session.commit()
 
         return jsonify(username=current_user.username,
-                    user_url=url_for('get_user', username=current_user.username),
-                    content=content, cid=c.cid, date_posted=c.date_posted.strftime('%d-%m-%Y'))
+                       user_url=url_for('get_user',
+                                        username=current_user.username),
+                       content=content,
+                       cid=c.cid,
+                       date_posted=c.date_posted.strftime('%d-%m-%Y'))
 
 
 @app.route("/comment/<int:com_id>/delete")
@@ -315,8 +335,8 @@ def explore():
     if request.method == 'GET':
         if not current_user.is_authenticated:
             return redirect(url_for('register'))
-        return render_template("explore.html", title="Explore", get_file_url=get_file_url)
-
+        return render_template("explore.html",
+                               title="Explore", get_file_url=get_file_url)
 
     if request.method == 'POST':
         start = int(request.form.get('start') or 1)
@@ -336,11 +356,12 @@ def explore():
             )
         status = True
         return jsonify(result=result, success=status)
-    
+
+
 @app.route("/user/<string:username>/followers", methods=['GET'])
 def get_followers(username):
     user = User.query.filter_by(username=username).first_or_404()
-    followers = user.followers.all()  # This assumes a relationship for followers
+    followers = user.followers.all()
     follower_data = []
 
     for follower in followers:
@@ -350,8 +371,9 @@ def get_followers(username):
             'image_url': get_file_url('profile_pics/' + follower.image_file),
             'is_following': current_user.is_following(follower)
         })
-    
+
     return jsonify(followers=follower_data)
+
 
 @app.route("/user/<string:username>/following", methods=['GET'])
 def get_following(username):
@@ -362,9 +384,17 @@ def get_following(username):
     for followed_user in following:
         following_data.append({
             'username': followed_user.username,
-            'profile_url': url_for('get_user', username=followed_user.username),
-            'image_url': get_file_url('profile_pics/' + followed_user.image_file),
+            'profile_url': url_for('get_user',
+                                   username=followed_user.username),
+            'image_url': get_file_url('profile_pics/' +
+                                      followed_user.image_file),
             'is_following': current_user.is_following(followed_user)
         })
-    
+
     return jsonify(following=following_data)
+
+
+# Cookie
+@app.route('/privacy-policy')
+def privacy_policy():
+    return render_template('privacy_policy.html')

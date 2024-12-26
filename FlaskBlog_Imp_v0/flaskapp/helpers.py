@@ -69,7 +69,7 @@ def save_media(picture, pic_type):
 
 
 def get_file_url(f_path):
-    # Since we're using local storage, construct a URL relative to static directory
+    # construct a URL relative to static directory
     return f'/static/{f_path}'
 
 
