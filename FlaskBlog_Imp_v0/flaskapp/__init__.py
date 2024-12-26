@@ -6,7 +6,7 @@ from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
 
-# load_dotenv() 
+# load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '2951b9d5bb58fe1fac16d872533168aa'
@@ -15,7 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
         'sqlite:///flaskblog.db'
 )
 db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)    
+bcrypt = Bcrypt(app)
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
