@@ -3,7 +3,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flaskapp import db, login_manager, app
 from flask_login import UserMixin
 import timeago
-import random
+# import random
 
 
 @login_manager.user_loader
@@ -101,6 +101,27 @@ class User(db.Model, UserMixin):
         fw_posts = Post.query.order_by(Post.date_posted.desc()).filter(Post.user_id.in_(fw_users))  # noqa: E501
         return fw_posts
 
+    # def get_user_suggestion(self):
+    #     user_follows = self.follows
+    #     avoid = [user.uid for user in user_follows]
+    #     avoid.append(self.uid)
+
+    #     available_users = User.query.filter(User.uid.notin_(avoid)).all()
+    #     if len(available_users) == 0:
+    #         return []
+    #     elif len(available_users) <= 2:
+    #         return available_users
+
+    #     # find sugg users
+    #     suggs = []
+    #     while len(suggs) < 2:
+    #         index = random.randint(0, len(available_users)-1)
+    #         user = available_users[index]
+    #         if user not in suggs:
+    #             suggs.append(user)
+
+    #     # print(suggs)
+    #     return suggs
     def get_user_suggestion(self):
         user_follows = self.follows
         avoid = [user.uid for user in user_follows]
@@ -109,30 +130,24 @@ class User(db.Model, UserMixin):
         available_users = User.query.filter(User.uid.notin_(avoid)).all()
         if len(available_users) == 0:
             return []
-        elif len(available_users) <= 2:
-            return available_users
 
-        # find sugg users
-        suggs = []
-        while len(suggs) < 2:
-            index = random.randint(0, len(available_users)-1)
-            user = available_users[index]
-            if user not in suggs:
-                suggs.append(user)
+        # Sort available users by the number of followers in descending order
+        available_users.sort(key=lambda user: user.followers.count(),
+                             reverse=True)
 
-        # print(suggs)
-        return suggs
-    
+        # Return the top 3 users with the most followers
+        return available_users[:3]
+
     def get_reset_token(self, expires_sec=300):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
         return s.dumps({'user_id': self.uid}).decode('utf-8')
-    
+
     @staticmethod
     def verify_reset_token(token):
         s = Serializer(app.config['SECRET_KEY'])
         try:
             user_id = s.loads(token)['user_id']
-        except:
+        except:  # noqa: E722
             return None
         return User.query.get(user_id)
 
