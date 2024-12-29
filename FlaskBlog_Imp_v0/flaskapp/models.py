@@ -122,6 +122,8 @@ class User(db.Model, UserMixin):
 
     #     # print(suggs)
     #     return suggs
+
+    # User suggestion based on the number of followers
     def get_user_suggestion(self):
         user_follows = self.follows
         avoid = [user.uid for user in user_follows]

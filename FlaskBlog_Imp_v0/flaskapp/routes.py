@@ -442,6 +442,11 @@ def reset_token(token):
         return redirect(url_for('reset_request'))
     form = ResetPasswordForm()
     if form.validate_on_submit():
+        # check if the new password is the same as the old password
+        if bcrypt.check_password_hash(user.password, form.password.data):
+            flash('The new password cannot be the same as the old password',
+                  'danger')
+            return redirect(url_for('reset_token', token=token))
         hashed_password = bcrypt.generate_password_hash(
             form.password.data).decode('utf-8')
         user.password = hashed_password

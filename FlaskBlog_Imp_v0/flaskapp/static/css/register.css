@@ -6,8 +6,9 @@
     }
 }
 
+
 .left-landing {
-    background: url("/static/cover/cover.jpg") no-repeat center center;
+    background: url("/static/cover/cover.jpg") no-repeat center center; 
     backdrop-filter: blur(6px);
     /* resize the background image smaller*/
     background-size: 75%;
@@ -25,3 +26,6 @@ h1 {
     font-weight: 700;
     color: black;
 }
+
+/* cover picture reference */
+/* Fair Use/Stephen Johnson */

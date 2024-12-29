@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+import re
 from flask_wtf.file import FileField, FileAllowed
 from wtforms.fields import (
     StringField,
@@ -47,6 +48,18 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError("Email is already taken.")
+        
+    def validate_password(self, password):
+        if ' ' in password.data:
+            raise ValidationError("Password cannot contain spaces.")
+        if not re.search(r'[A-Z]', password.data):
+            raise ValidationError("Password must contain at least one uppercase letter.")
+        if not re.search(r'[a-z]', password.data):
+            raise ValidationError("Password must contain at least one lowercase letter.")
+        if not re.search(r'[0-9]', password.data):
+            raise ValidationError("Password must contain at least one number.")
+        if not re.search(r'[!@#$%^&*(),.?":{}-|<>]', password.data):
+            raise ValidationError("Password must contain at least one special character.")
 
 
 class UsernameLoginForm(FlaskForm):
@@ -136,3 +149,15 @@ class ResetPasswordForm(FlaskForm):
         validators=[DataRequired(),
                     EqualTo('password')])
     submit = SubmitField('Reset Password')
+
+    def validate_password(self, password):
+        if ' ' in password.data:
+            raise ValidationError("Password cannot contain spaces.")
+        if not re.search(r'[A-Z]', password.data):
+            raise ValidationError("Password must contain at least one uppercase letter.")
+        if not re.search(r'[a-z]', password.data):
+            raise ValidationError("Password must contain at least one lowercase letter.")
+        if not re.search(r'[0-9]', password.data):
+            raise ValidationError("Password must contain at least one number.")
+        if not re.search(r'[!@#$%^&*(),.?":{}|-<>]', password.data):
+            raise ValidationError("Password must contain at least one special character.")
